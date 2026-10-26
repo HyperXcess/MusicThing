@@ -1,6 +1,6 @@
 # Visual guide
 
-These images are rendered directly from the app’s drawing code at an 800 × 400 viewport using representative frequency input. They show the actual artwork, not concept mockups; a still image cannot show motion or live audio response.
+Visualizer screenshots show app rendering. The updated Beat Fighter screenshot is captured from Car Thing; the fighter design strip and object atlases show the approved source artwork. Still images cannot show animation or live audio response.
 
 ## EQ Bars
 
@@ -28,7 +28,7 @@ Three independently reacting overlapping curves: solid teal, dashed purple and d
 
 ## Neon Stage
 
-Mirrored frequency bars and restrained sweeping stage beams. Also used behind the DJs.
+Mirrored frequency bars. DJ scenes retain their stage lighting.
 
 ![Neon Stage screenshot](visualizer-4.png)
 
@@ -101,3 +101,44 @@ Headphone check, crossfader sweep, double scratch, overhead clap and robot wave.
 Use the music-note icon to toggle the upper-right current/next-line overlay. Tap the character name for a small scrollable dropdown; the animation continues behind it. Left/right swipes change effects, vertical swipes adjust the current character mode’s pace, and More opens Spotify companion pages. Pace is saved separately for Runner, Fighter and DJ. Timed lyrics depend on LRCLIB availability.
 
 For installation, audio permissions, Spotify permissions and recovery instructions, return to the [README](../README.md).
+
+
+## Updated Beat Fighter cast
+
+Master Jin, Iron Monk, Jade Lotus, Ember Fox, Chrome Fist and The Bride use illustrated super-deformed animation poses. The design strip below is source artwork; the Beat Fighter screenshot above shows device rendering. The quiet-mode strip shows the current illustrated resting poses.
+
+![Approved fighter designs](fighter-designs.png)
+
+## Fifty interactive objects
+
+Each shuffled bag contains all fifty objects once. Reactions include illustrated fragments, sliced halves, launches, bounces, spills, spring rebounds, nesting dolls, a portal, a swinging wrecking ball and cascading dominoes. Actions are visual and do not change Spotify playback.
+
+### Objects 1–10
+
+Arcade cabinets, Cassette tapes, Vinyl records, Boomboxes, Disco balls, Headphones, Speaker towers, Guitars, Drum kits, Microphone stands.
+
+![Object artwork 1–10](objects-0.png)
+
+### Objects 11–20
+
+Training dummies, Crates, Brick stacks, Ice blocks, Watermelons, Pumpkins, Sushi rolls, Ramen bowls, Soda cans, Popcorn machines.
+
+![Object artwork 11–20](objects-1.png)
+
+### Objects 21–30
+
+Bowling balls, Basketballs, Soccer balls, Pinball bumpers, Dice, Slot machines, Treasure chests, Piggy banks, Gem clusters, Alarm clocks.
+
+![Object artwork 21–30](objects-2.png)
+
+### Objects 31–40
+
+Wind-up robots, Toy tanks, Flying saucers, Rockets, Mechanical spiders, Floating eyeballs, Angry clouds, Meteorites, Ringed planets, Black-hole orbs.
+
+![Object artwork 31–40](objects-3.png)
+
+### Objects 41–50
+
+Rubber ducks, Punching clowns, Piñatas, Nesting dolls, Jack-in-the-boxes, Bubblegum bubbles, Mystery doors, Vending machines, Wrecking balls, Domino chains.
+
+![Object artwork 41–50](objects-4.png)

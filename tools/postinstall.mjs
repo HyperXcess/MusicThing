@@ -2,10 +2,10 @@ import {readFile,writeFile,access,copyFile} from 'node:fs/promises';import {dirn
 const root=dirname(fileURLToPath(import.meta.url));let host=null;
 const arg=process.argv.indexOf('--host');if(arg>=0&&process.argv[arg+1])host=resolve(process.argv[arg+1]);
 if(!host){let candidate=root;for(let i=0;i<7;i++){try{await access(join(candidate,'webapp/assets',bundleSpecs[0].file));await access(join(candidate,'apps/spotify/client/index.html'));host=candidate;break}catch{}const next=dirname(candidate);if(next===candidate)break;candidate=next}}
-if(!host)throw Error('Install DeskThing client 0.11.2 and the Spotify app before initializing MusicThing.');
+if(!host)throw Error('Install DeskThing client 0.11.2 and the Spotify app before initializing VisualThing.');
 const updates=[];for(const spec of bundleSpecs){const path=join(host,'webapp/assets',spec.file),original=await readFile(path,'utf8');updates.push({path,original,source:patchBundle(original,spec)})}
 const spotifyServer=join(host,'apps/spotify/server/index.js');let spotifySource=null;try{spotifySource=await readFile(spotifyServer,'utf8')}catch{}if(spotifySource!==null)updates.push({path:spotifyServer,original:spotifySource,source:patchSpotifyMetadata(spotifySource)});
 const index=join(host,'apps/spotify/client/index.html'),original=await readFile(index,'utf8');updates.push({path:index,original,source:patchSpotifyIndex(original)});
 const link=join(host,'apps/spotify/client/musicthing-link.js');let previous=null;try{previous=await readFile(link,'utf8')}catch{}updates.push({path:link,original:previous,source:await readFile(join(root,'integrations/spotify-musicthing.js'),'utf8')});
 const written=[];try{for(const update of updates){if(update.source===update.original)continue;if(update.original!==null){const backup=update.path+'.musicthing.backup';try{await access(backup)}catch{await copyFile(update.path,backup)}}await writeFile(update.path,update.source);written.push(update)}}catch(error){for(const update of written){if(update.original!==null)await writeFile(update.path,update.original);else await (await import('node:fs/promises')).unlink(update.path)}throw error}
-console.log('MusicThing integration staged with backups. Push the staged client and restart Chromium. Calendar settings and Spotify credentials were not changed.');
+console.log('VisualThing integration staged with backups. Push the staged client and restart Chromium. Calendar settings and Spotify credentials were not changed.');

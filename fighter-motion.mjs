@@ -32,8 +32,8 @@ export function fighterPose(move,progress,now=0,energy=0){
 }
 export const fighterMove=(kind,index)=>kind==='low'?'sweep':kind==='mid'?(index%2?'punch':'flying-kick'):(index%2?'high-punch':'dragon-punch');
 
-export const moveHeights={'punch':55,'high-punch':94,'dragon-punch':119,'flying-kick':55,'spin-kick':55,'tornado-kick':94,'backfist':55,'sweep':16,'duck':99,'jump':20,'draw-slash':55,'rising-cut':105,'overhead-cut':75,'spinning-slash':55,'low-cut':23,'leaping-cut':94};
-export const moveDeck=['spin-kick','punch','duck','tornado-kick','jump','sweep','dragon-punch','backfist','flying-kick','high-punch'];
+export const moveHeights={'punch':55,'high-punch':94,'dragon-punch':119,'flying-kick':55,'roundhouse':75,'spin-kick':55,'tornado-kick':94,'backfist':55,'sweep':16,'duck':99,'jump':20,'draw-slash':55,'rising-cut':105,'overhead-cut':75,'spinning-slash':55,'low-cut':23,'leaping-cut':94};
+export const moveDeck=['roundhouse','spin-kick','punch','duck','tornado-kick','jump','sweep','dragon-punch','backfist','flying-kick','high-punch'];
 export const isEvasion=move=>move==='duck'||move==='jump';
 
 export const katanaDeck=['draw-slash','rising-cut','overhead-cut','spinning-slash','low-cut','leaping-cut','duck','jump'];

@@ -1,5 +1,5 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MusicThing</title><link rel="stylesheet" href="style.css"></head>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VisualThing</title><link rel="stylesheet" href="style.css"></head>
 <body><main>
 <header>
  <button id="back" aria-label="Back to previous app">‹ Back</button>
@@ -9,7 +9,7 @@
  <button id="menuToggle" aria-label="More options" title="More options" aria-controls="musicMenu" aria-expanded="false">More</button>
 
 </header>
-<section id="visualizer"><div class="canvas-wrap"><button id="restoreControls" aria-label="Show MusicThing controls">↙</button><canvas id="scope" width="760" height="300"></canvas><canvas id="gpu" width="760" height="300" hidden></canvas><div id="sensitivityHud" aria-live="polite"><span id="gestureHudLabel">Sensitivity</span><strong id="sensitivityHudValue">1.0×</strong><div class="sensitivity-meter"><i id="sensitivityHudFill"></i></div><small>↑ more · ↓ less</small></div><span id="captureStatus">Connecting to Mac audio…</span></div></section>
+<section id="visualizer"><div class="canvas-wrap"><button id="restoreControls" aria-label="Show VisualThing controls">↙</button><canvas id="scope" width="760" height="300"></canvas><canvas id="gpu" width="760" height="300" hidden></canvas><div id="sensitivityHud" aria-live="polite"><span id="gestureHudLabel">Sensitivity</span><strong id="sensitivityHudValue">1.0×</strong><div class="sensitivity-meter"><i id="sensitivityHudFill"></i></div><small>↑ more · ↓ less</small></div><span id="captureStatus">Connecting to Mac audio…</span></div></section>
 <section id="video" hidden><div class="row" hidden><button id="loadVideo">Load current track</button><button id="videoExample">Try video example</button><button id="stopVideo">Close video</button></div><div id="embed"></div></section>
 <section id="lyrics" hidden><div class="lyrics-toolbar"><button id="refreshLyrics">Refresh</button><button id="followLyrics" hidden>Follow live</button><span id="lyricMode">Lyrics · LRCLIB</span></div><div id="lyricText">Loading lyrics…</div></section>
 <section id="queue" class="scroll" hidden><div class="list" id="queueList"></div></section>
@@ -17,8 +17,8 @@
 <section id="devices" class="scroll" hidden><div class="list" id="deviceList"></div></section>
 <footer id="status" role="status"></footer>
 </main>
-<aside id="musicMenu" role="dialog" aria-modal="true" aria-label="MusicThing options" hidden><div class="menu-card">
- <div class="menu-heading"><button id="closeMenu" aria-label="Close menu"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg><span>Close</span></button><strong>MusicThing</strong></div>
+<aside id="musicMenu" role="dialog" aria-modal="true" aria-label="VisualThing options" hidden><div class="menu-card">
+ <div class="menu-heading"><button id="closeMenu" aria-label="Close menu"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg><span>Close</span></button><strong>VisualThing</strong></div>
  <div class="menu-body">
   <div class="menu-pages"><h2>Explore</h2><nav id="tabs" role="tablist" aria-label="Music pages"></nav></div>
   <div class="menu-visuals">

@@ -1,7 +1,7 @@
 import {createCharacterPicker} from './character-picker.mjs';
 import {setButtonIcon} from './icons.mjs';
 import {lyricIndex,playbackPosition} from './lyrics-sync.mjs';
-// Separate request IDs keep the overlay independent of MusicThing's Lyrics page.
+// Separate request IDs keep the overlay independent of VisualThing's Lyrics page.
 export function createLyricOverlay({api,root,active,scopeApp,visuals}){
  const button=document.createElement('button'),caption=document.createElement('div'),line=document.createElement('div'),nextLine=document.createElement('div');
  setButtonIcon(button,'lyrics',20);button.title='Show or hide lyrics';button.setAttribute('aria-label','Show lyrics over visuals');

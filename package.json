@@ -1,6 +1,6 @@
 {
   "name": "musicthing",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
@@ -17,7 +17,7 @@
   },
   "author": "HyperXcess",
   "license": "MIT",
-  "description": "Audio-reactive visualizers, animated runners and timed Spotify lyrics for DeskThing",
+  "description": "VisualThing: audio-reactive worlds, animated fighters, runners and DJs for DeskThing",
   "homepage": "https://github.com/HyperXcess/MusicThing",
   "repository": {
     "type": "git",

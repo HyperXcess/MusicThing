@@ -1,0 +1,13 @@
+import {modes} from './visuals.mjs';
+const get=(key,fallback)=>{try{return localStorage.getItem(key)||fallback}catch{return fallback}},put=(key,value)=>localStorage.setItem(key,String(value));
+const effects=document.getElementById('effects'),adjustments=document.getElementById('adjustments');
+let mode=0;const sliders=[];
+function slider(label,key,min,max){const row=document.createElement('label'),name=document.createElement('span'),input=document.createElement('input'),value=document.createElement('output');input.type='range';input.min=min;input.max=max;input.step=.1;input.setAttribute('aria-label',label);name.textContent=label;row.append(name,input,value);adjustments.append(row);const entry={row,name,input,value,key};input.oninput=()=>{put(entry.key,input.value);value.textContent=Number(input.value).toFixed(1)+'×'};sliders.push(entry);return entry}
+const reaction=slider('Audio reaction','musicthing-sensitivity-v2',.5,4),pace=slider('Running speed','musicthing-run-speed',.5,2.5),eq=slider('EQ sensitivity','musicthing-skyline-sensitivity',.1,2);
+modes.forEach((name,i)=>{const b=document.createElement('button');b.textContent=name;b.onclick=()=>{put('musicthing-selected-effect',name);put('musicthing-spotify-preview','visualizer');window.parent.postMessage({source:'musicthing-controls',type:'visualizer-selected'},'*');render()};effects.append(b)});
+function render(){mode=Math.max(0,modes.indexOf(get('musicthing-selected-effect',modes[0])));Array.from(effects.children).forEach((b,i)=>b.setAttribute('aria-pressed',String(i===mode)));const character=mode>=5&&mode<=7;reaction.row.hidden=character;pace.row.hidden=!character;eq.row.hidden=mode!==5;pace.key=mode===6?'musicthing-fighter-speed':mode===7?'musicthing-dj-speed':'musicthing-run-speed';pace.name.textContent=mode===6?'Combat pace':mode===7?'DJ pace':'Running speed';pace.input.setAttribute('aria-label',pace.name.textContent);for(const s of sliders){s.input.value=get(s.key,1);s.value.textContent=Number(s.input.value).toFixed(1)+'×'}document.getElementById('pause').textContent=get('musicthing-visuals-paused','false')==='true'?'Resume visuals':'Pause visuals'}
+document.getElementById('pause').onclick=()=>{put('musicthing-visuals-paused',get('musicthing-visuals-paused','false')!=='true');render()};
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{put('musicthing-control-page',JSON.stringify({page:b.dataset.page,time:Date.now()}));window.parent.postMessage({source:'musicthing-controls',type:'open-page'},'*')});
+window.addEventListener('storage',render);render();
+
+if(get('musicthing-spotify-preview','artwork')==='visualizer')window.parent.postMessage({source:'musicthing-controls',type:'restore-visualizer'},'*');

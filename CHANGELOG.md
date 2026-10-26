@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.7 — 2026-10-26
+
+- Rename the public app to VisualThing; preserve the musicthing app ID and existing update URLs.
+- Replace all six Beat Fighter characters with the approved super-deformed illustrated cast.
+- Add dedicated sweep, roundhouse, spin, jump, duck, recovery and quiet poses, plus katana attacks.
+- Add fifty illustrated objects in shuffled rotation, with slicing, shattering, bouncing, spilling, springs, portals and domino reactions.
+- Embed small approved ready poses and retain the last loaded character during decoding; remove the old vector fallback.
+- Lower the fighter spectrum backdrop opacity to 50 percent, with local waveform landing ripples and audio-driven impact effects.
+- Keep lyrics and character selection on screen; provide an embeddable options page for configured ControlThing hosts.
+
 ## 0.2.6 — 2026-10-26
 
 - Synchronize Spotify pause/resume with character quiet modes, including group scenes, runners and fighters.

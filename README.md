@@ -1,4 +1,4 @@
-# MusicThing
+# VisualThing
 
 [Releases](https://github.com/HyperXcess/MusicThing/releases) · [Issues](https://github.com/HyperXcess/MusicThing/issues)
 
@@ -20,13 +20,13 @@ Install and sign in to DeskThing's **Spotify app** first. Music must play throug
 
 1. In DeskThing, open **Downloads → Add Client/App** in the left sidebar.
 2. Add `https://github.com/HyperXcess/MusicThing` as an **App** repository, then pull/download the latest release and initialize it.
-3. The declared post-install helper backs up and stages MusicThing navigation and the Spotify visualizer integration. Spotify must already be installed. It does not modify Spotify credentials or calendar settings.
+3. The declared post-install helper backs up and stages VisualThing navigation and the Spotify visualizer integration. Spotify must already be installed. It does not modify Spotify credentials or calendar settings.
 4. Open **Clients → Push staged client**, then **Restart Chromium on the Device**.
-5. Open MusicThing from your app launcher. Audio capture starts automatically.
+5. Open VisualThing from your app launcher. Audio capture starts automatically.
 
-The `musicthing-vVERSION.zip` asset is the installable app. `latest.json` provides store metadata, the version-pinned runtime URL, embedded icon, size, and SHA-512. `MusicThing-source-vVERSION.zip` is development source.
+The `musicthing-vVERSION.zip` asset is the installable app. `latest.json` provides store metadata, the version-pinned runtime URL, embedded icon, size, and SHA-512. `VisualThing-source-vVERSION.zip` is development source.
 
-[LaunchThing](https://github.com/HyperXcess/LaunchThing) and [ControlThing](https://github.com/HyperXcess/ControlThing) are optional companions. ControlThing adds the bottom waveform entry: tap it or pull up from the bottom edge to open MusicThing. The entry disappears inside MusicThing; **Back** returns to your previous app. A short pull previews and cancels. Without ControlThing, use your app launcher.
+[LaunchThing](https://github.com/HyperXcess/LaunchThing) and [ControlThing](https://github.com/HyperXcess/ControlThing) are optional companions. ControlThing adds the bottom waveform entry: tap it or pull up from the bottom edge to open VisualThing. The entry disappears inside VisualThing; **Back** returns to your previous app. A short pull previews and cancels. Without ControlThing, use your app launcher.
 
 ## Controls
 
@@ -42,9 +42,9 @@ The `musicthing-vVERSION.zip` asset is the installable app. `latest.json` provid
 | More → Adjust | Adjust pace separately from audio/EQ reaction |
 | More | Effect picker, visual pause, Lyrics, Up Next, Recent and Devices |
 
-On the original Spotify screen, swipe sideways to cycle artwork and effects; swipe up on artwork to show EQ Bars. Spotify’s playback controls remain above the preview. MusicThing’s own screen uses a compact player row. Header controls stay in fixed positions, away from the physical dial.
+On the original Spotify screen, swipe sideways to cycle artwork and effects; swipe up on artwork to show EQ Bars. Spotify’s playback controls remain above the preview. VisualThing’s own screen uses a compact player row. Header controls stay in fixed positions, away from the physical dial.
 
-Pausing Spotify switches characters into their quiet activities immediately; resuming returns to performance. Native song-state updates are shared between MusicThing and the Spotify preview. Stale audio frames expire rather than keeping a character running.
+Pausing Spotify switches characters into their quiet activities immediately; resuming returns to performance. Native song-state updates are shared between VisualThing and the Spotify preview. Stale audio frames expire rather than keeping a character running.
 
 ## Character modes
 
@@ -82,8 +82,22 @@ npm run package
 
 The build compiles the Swift ScreenCaptureKit helper and bundles client/server code for Chromium 69/Node 20. Release files are in `release/`. For a manual integration, build, then run `node dist/postinstall.mjs --host "/path/to/deskthing"` with DeskThing closed; push the staged client afterward.
 
-Post-install changes have `.musicthing.backup` files. Restore these with DeskThing closed, then push/restart the client to undo the integration. A full-bundle backup can include older companion versions; reapply other extensions afterward. Reinstalling or updating Spotify can replace its client integration; reinitialize MusicThing to restore it.
+Post-install changes have `.musicthing.backup` files. Restore these with DeskThing closed, then push/restart the client to undo the integration. A full-bundle backup can include older companion versions; reapply other extensions afterward. Reinstalling or updating Spotify can replace its client integration; reinitialize VisualThing to restore it.
 
 ## License
 
 MIT. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for dependency credits and licenses. Not an official Spotify or DeskThing product.
+
+
+### VisualThing v0.2.7
+
+VisualThing is the new public name. Its internal app ID, installation folder, runtime ZIP prefix and GitHub repository remain `musicthing` / `MusicThing` for update compatibility.
+
+Beat Fighter now has six illustrated chibi fighters, expanded combat and quiet poses, and fifty recognizable interactive props. See the [updated visual guide](docs/VISUAL-GUIDE.md) for the cast and complete object galleries.
+
+The public package includes eight visualizers. The embeddable `/app/musicthing/control-options.html` page is available for a configured ControlThing host; installing this app alone does not install or replace ControlThing.
+
+
+### Standalone app and optional ControlThing integration
+
+VisualThing runs as its own DeskThing app. Open it from the app list and use its More menu for visualizer selection, sensitivity, animation pace, lyrics, queue, recent tracks and speakers. ControlThing is not required. When configured, ControlThing can embed the settings page as a convenience; the on-screen lyric toggle and character picker remain in VisualThing.
