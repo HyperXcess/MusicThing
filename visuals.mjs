@@ -1,39 +1,32 @@
-import {createRunner} from './runner.mjs';
-export const modes=['EQ Bars','Warp Tunnel','Synth Grid','Spectrum Waves','Beat Runner'];
+import {createSpectrumWaves} from './spectrum-waves.mjs';
+import {paintNeonStage} from './neon-stage.mjs';
+import {createDJ,djCast,djCharacterOrder} from './dj.mjs';
+import {createFighter,fighters} from './fighter.mjs';
+import {createRunner,runnerCharacters} from './runner.mjs';
+export const modes=['EQ Bars','Warp Tunnel','Synth Grid','Spectrum Waves','Neon Stage','Beat Runner','Beat Fighter','Beat DJ'];
 // Fast attack, slower release; never normalise silence into a full-scale signal.
 export function audioLevels(bands,previous=Array(32).fill(0)) {return Array.from({length:32},(_,i)=>{const raw=Number(bands?.[i])||0,target=Math.max(0,Math.min(1,raw));const old=previous[i]||0;return old+(target-old)*(target>old?.8:.22)})}
 export function audioEnergy(bands){return Math.sqrt(bands.reduce((sum,v)=>sum+v*v,0)/Math.max(1,bands.length))}
 export function createVisuals(canvas,gpu){
- const runner=createRunner(),ctx=canvas.getContext('2d',{alpha:false});let mode=0,frame={bands:Array(32).fill(0),scope:[]},smooth=Array(32).fill(0),gridSmooth=Array(32).fill(0),history=Array.from({length:24},()=>Array(32).fill(0)),waveMotion=Array.from({length:3},(_,i)=>({level:0,position:0,velocity:0,phase:i*2.1})),skylineGain=1,runSpeed=1,sensitivity=1,last=0,active=true,enabled=false,webgl=null;
+ const spectrum=createSpectrumWaves(),runner=createRunner({label:false}),fighter=createFighter({spectrum,label:false}),dj=createDJ({label:false}),ctx=canvas.getContext('2d',{alpha:false});let mode=0,frame={bands:Array(32).fill(0),scope:[]},smooth=Array(32).fill(0),gridSmooth=Array(32).fill(0),history=Array.from({length:24},()=>Array(32).fill(0)),skylineGain=1,paces={5:1,6:1,7:1},sensitivity=1,last=0,active=true,enabled=false,webgl=null;
  try{webgl=feedback(gpu)}catch{webgl=null}
  function showCanvas(){const shader=mode===1&&!!webgl;canvas.hidden=shader;gpu.hidden=!shader;if(canvas.style)canvas.style.display=shader?'none':'block';if(gpu.style)gpu.style.display=shader?'block':'none'}
  try{runner.setCharacter(Number(localStorage.getItem('musicthing-runner-character'))||0)}catch{}
+ try{fighter.setCharacter(Number(localStorage.getItem('musicthing-fighter-character'))||0)}catch{}
+ try{dj.setCharacter(Number(localStorage.getItem('musicthing-dj-character'))||0)}catch{}
+ if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener('storage',event=>{const target=event.key==='musicthing-dj-character'?dj:event.key==='musicthing-fighter-character'?fighter:event.key==='musicthing-runner-character'?runner:null;if(target)target.setCharacter(Number(event.newValue)||0)});
  showCanvas();
- function draw(now){if(!active)return;requestAnimationFrame(draw);if(!enabled)return;if(now-last<40)return;last=now;smooth=audioLevels(frame.bands.map(v=>Math.min(1,Math.max(0,Number(v)||0)*sensitivity)),smooth);const w=canvas.width,h=canvas.height,energy=audioEnergy(smooth);
+ function draw(now){if(!active)return;requestAnimationFrame(draw);if(!enabled)return;if(now-last<(mode===6?25:mode===7?dj.frameInterval():40))return;last=now;smooth=audioLevels(frame.bands.map(v=>Math.min(1,Math.max(0,Number(v)||0)*sensitivity)),smooth);const w=canvas.width,h=canvas.height,energy=audioEnergy(smooth);
   showCanvas();
   if(mode===1&&webgl){webgl.draw(now/1000,smooth,energy);return}
   ctx.fillStyle=mode===1?'rgba(8,6,14,.15)':'#08060e';ctx.fillRect(0,0,w,h);
   if(mode===0){const gap=5,bw=(w-40)/32-gap;for(let i=0;i<32;i++){const x=20+i*(bw+gap),height=smooth[i]*(h-35);ctx.fillStyle=i<10?'#27ead5':i<22?'#b782ff':'#ff2397';ctx.fillRect(x,h-15-height,bw,Math.max(3,height));ctx.fillStyle='#ffffff';ctx.fillRect(x,h-18-height,bw,3)}
   }else if(mode===1){ctx.save();ctx.translate(w/2,h/2);ctx.rotate(Math.sin(now/8000)*.3);for(let j=0;j<14;j++){const radius=((now/35+j*35)%500);ctx.strokeStyle=j%2?'#ff2397':'#27ead5';ctx.lineWidth=1+energy*7;ctx.beginPath();for(let i=0;i<=32;i++){const angle=i/32*Math.PI*2,r=radius*(1+smooth[i%32]*1.4),x=Math.cos(angle)*r,y=Math.sin(angle)*r*.65;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke()}ctx.restore();
-  }else if(mode===3){
-   const colors=['#27ead5','#b782ff','#ff2397'],ranges=[[0,10],[10,22],[22,32]];
-   for(let layer=0;layer<3;layer++){
-    const [lo,hi]=ranges[layer],motion=waveMotion[layer];
-    const band=smooth.slice(lo,hi),level=audioEnergy(band),hit=Math.max(0,level-motion.level);
-    motion.level=level;motion.velocity+=(level-motion.position)*.24+hit*(1.8+layer*.35);motion.velocity*=.68;motion.position+=motion.velocity;
-    if(level<.0001){motion.position=0;motion.velocity=0}
-    const bounce=Math.max(0,Math.min(1.35,motion.position)),amplitude=Math.pow(bounce,.7);
-    motion.phase+=(.10+layer*.045)+level*.35+hit*1.2;
-    ctx.strokeStyle=colors[layer];ctx.lineWidth=2.5+level*1.8;ctx.beginPath();
-    for(let i=0;i<=160;i++){const u=i/160,pos=u*(hi-lo-1),index=Math.floor(pos),f=pos-index,blend=f*f*(3-2*f);
-     const local=band[index]*(1-blend)+band[Math.min(hi-lo-1,index+1)]*blend;
-     const envelope=Math.pow(Math.sin(u*Math.PI),.65);
-     const wave=Math.sin(u*Math.PI*(4+layer*2)-motion.phase)*.68+Math.sin(u*Math.PI*(9+layer*3)+motion.phase*1.37)*.24+Math.sin(u*Math.PI*2+motion.phase*.7)*.08;
-     const y=h/2+wave*amplitude*(.65+local*.65)*h*.43*envelope;
-     i?ctx.lineTo(u*w,y):ctx.moveTo(u*w,y);
-    }ctx.stroke();
-   }
-  }else if(mode===4){runner.draw(ctx,w,h,now,smooth,sensitivity,runSpeed,skylineGain);
+  }else if(mode===3){spectrum.draw(ctx,w,h,now,smooth);
+  }else if(mode===5){runner.draw(ctx,w,h,now,smooth,sensitivity,paces[mode],skylineGain);
+  }else if(mode===6){fighter.draw(ctx,w,h,now,smooth,sensitivity,paces[mode],skylineGain);
+  }else if(mode===7){dj.draw(ctx,w,h,now,smooth,paces[mode]);
+  }else if(mode===4){paintNeonStage(ctx,w,h,now,smooth);
   }else{gridSmooth=audioLevels(frame.bands,gridSmooth);history.unshift([...gridSmooth]);history.pop();const rowFloors=history.map(row=>Math.min(...row)*.75),horizon=h*.24;ctx.strokeStyle='#ff2397';ctx.lineWidth=2;ctx.beginPath();ctx.arc(w/2,horizon,35,Math.PI,0);ctx.stroke();
    function point(z,x,floor=false){const depth=(z+1)/25,spread=.08+depth*1.6,row=history[23-z];
     const base=horizon+depth*depth*(h-horizon),anchor=Math.pow(Math.sin(x/31*Math.PI),.7)*Math.sqrt(Math.sin(depth*Math.PI));
@@ -47,7 +40,7 @@ export function createVisuals(canvas,gpu){
    ctx.strokeStyle='#27ead5';ctx.lineWidth=1;for(let x=0;x<32;x++){ctx.beginPath();for(let z=0;z<24;z++){const p=point(z,x);z?ctx.lineTo(...p):ctx.moveTo(...p)}ctx.stroke()}
   }
  }
- requestAnimationFrame(draw);return {setSkylineSensitivity:v=>{if(Number.isFinite(v))skylineGain=Math.max(.1,Math.min(2,v))},cycleRunner:()=>{if(mode!==4)return null;const chosen=runner.cycle();try{localStorage.setItem('musicthing-runner-character',String(chosen.index))}catch{}return chosen.name},tapRunner:(x,y)=>{if(mode!==4)return null;const chosen=runner.tap(x,y);if(chosen)try{localStorage.setItem('musicthing-runner-character',String(chosen.index))}catch{}return chosen?.name||null},setRunnerSpeed:v=>{if(Number.isFinite(v))runSpeed=Math.max(.5,Math.min(2.5,v))},setSensitivity:v=>{if(Number.isFinite(v))sensitivity=Math.max(.5,Math.min(4,v))},setFrame:f=>frame=f,setMode:i=>{mode=i;showCanvas();ctx.fillStyle='#08060e';ctx.fillRect(0,0,canvas.width,canvas.height)},setEnabled:v=>enabled=v,stop:()=>active=false,hasShaders:!!webgl};
+ requestAnimationFrame(draw);return {getCharacters:()=>{const order=mode===7?djCharacterOrder():null,items=mode===7?djCast:mode===6?fighters:mode===5?runnerCharacters:[],selected=mode===7?dj.getCharacter():mode===6?fighter.getCharacter():runner.getCharacter();return items.map((entry,i)=>({index:i,name:mode===7?entry[0]:mode===6?entry.name:entry,selected:i===selected,...mode===7?{kind:entry[3],skin:entry[1],accent:entry[2]}:{}})).sort((a,b)=>mode===7?order.indexOf(a.index)-order.indexOf(b.index):0)},selectCharacter:i=>{if(mode<5||mode>7)return;const target=mode===7?dj:mode===6?fighter:runner;target.setCharacter(mode===7?djCharacterOrder()[i]:i);try{localStorage.setItem(mode===7?'musicthing-dj-character':mode===6?'musicthing-fighter-character':'musicthing-runner-character',String(target.getCharacter()))}catch{}},setSkylineSensitivity:v=>{if(Number.isFinite(v))skylineGain=Math.max(.1,Math.min(2,v))},cycleRunner:()=>{if(mode<5||mode>7)return null;const chosen=(mode===7?dj:mode===6?fighter:runner).cycle();try{localStorage.setItem(mode===7?'musicthing-dj-character':mode===6?'musicthing-fighter-character':'musicthing-runner-character',String(chosen.index))}catch{}return chosen.name},tapRunner:(x,y)=>{if(mode!==5)return null;const chosen=runner.tap(x,y);if(chosen)try{localStorage.setItem(mode===7?'musicthing-dj-character':mode===6?'musicthing-fighter-character':'musicthing-runner-character',String(chosen.index))}catch{}return chosen?.name||null},getRunnerSpeed:()=>paces[mode]||1,setRunnerSpeed:v=>{if(mode>=5&&mode<=7&&Number.isFinite(v))paces[mode]=Math.max(.5,Math.min(2.5,v))},setSensitivity:v=>{if(Number.isFinite(v))sensitivity=Math.max(.5,Math.min(4,v))},setFrame:f=>frame=f,setMode:i=>{mode=i;showCanvas();ctx.fillStyle='#08060e';ctx.fillRect(0,0,canvas.width,canvas.height)},setEnabled:v=>enabled=v,stop:()=>active=false,hasShaders:!!webgl};
 }
 function feedback(canvas){const gl=canvas.getContext('webgl',{alpha:false,antialias:false,preserveDrawingBuffer:false});if(!gl)throw Error('No WebGL');
  const vertex='attribute vec2 p; varying vec2 uv; void main(){uv=p*.5+.5;gl_Position=vec4(p,0.,1.);}';

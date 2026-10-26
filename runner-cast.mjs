@@ -129,5 +129,5 @@ export function paintCastIdle(ctx,P,s,id,now,ground,rx){const [name,[metal,shine
   const hit=Math.sin(now/110),other=Math.cos(now/130);line('#ffe0ba',2,[[35,-38+hit*9],[47,-28-hit*11]]);line('#ffe0ba',2,[[12,-42+other*8],[61,-29-other*12]]);
   if(hit>.7){line('#ff2397',1,[[46,-35],[42,-40]]);line('#27ead5',1,[[51,-35],[54,-42]])}
  }
- ctx.font=Math.round(12*s)+'px Arial';ctx.fillStyle=accent;ctx.fillText({delivery:'PARCEL SCAN',rewind:'REWINDING',polish:'VISOR POLISH',bubbles:'DECOMPRESS',boardspin:'WHEEL CHECK',campfire:'WARMING UP',fade:'DEEP SLEEP',egg:'HATCHING',conjure:'SPELL STUDY',noodles:'NOODLE BREAK',route:'ROUTE CHECK',starchart:'STAR CHART',drums:'SOUND CHECK'}[idle],rx-35*s,ground+28*s);
+ ctx.font=Math.round(12*s)+'px Arial';ctx.fillStyle=accent;ctx.fillText({delivery:'PARCEL SCAN',rewind:'REWINDING',polish:'VISOR POLISH',bubbles:'DECOMPRESS',boardspin:'WHEEL CHECK',campfire:'WARMING UP',fade:'DEEP SLEEP',egg:'HATCHING',conjure:'SPELL STUDY',noodles:'NOODLE BREAK',route:'ROUTE CHECK',starchart:'STAR CHART',drums:'SOUND CHECK'}[idle],rx-35*s,Math.min(ground+28*s,(ctx.canvas?.height??Infinity)-8));
 }

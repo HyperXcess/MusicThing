@@ -1,3 +1,4 @@
+import {runnerBodies,paintRunnerBody,paintRunnerBoot} from './runner-bodies.mjs';
 import {cast,paintCastHead,paintCastIdle,runnerIdlePose,paintGhostSleep} from './runner-cast.mjs';
 import {drawRunnerEnvironment} from './runner-environments.mjs';
 // Ten distinct stride silhouettes: compression, push-off, flight and contact.
@@ -17,9 +18,9 @@ export function runnerPose(cycle){const position=((cycle%1)+1)%1*stride.length,i
 export const runnerCharacters=cast.map(c=>c[0]);
 const palettes=cast.map(c=>c[1]);
 // Canvas-only arcade runner: fixed camera, beat obstacles, automatic jumps.
-export function createRunner(){let last=null,travel=0,speed=0,silence=0,bassOld=0,cooldown=0,jump=0,velocity=0,obstacles=[],charging=false,character=0,bounds=null,idleBlend=0;
+export function createRunner({label=true}={}){let last=null,travel=0,speed=0,silence=0,bassOld=0,cooldown=0,jump=0,velocity=0,obstacles=[],charging=false,character=0,bounds=null,idleBlend=0;
  const cycle=()=>{character=(character+1)%cast.length;return {index:character,name:runnerCharacters[character]}};
- return {cycle,setCharacter:i=>character=((i%cast.length)+cast.length)%cast.length,tap(x,y){if(!bounds||x<bounds.left||x>bounds.right||y<bounds.top||y>bounds.bottom)return null;return cycle()},draw(ctx,w,h,now,bands,sensitivity=1,runSpeed=1,skylineGain=1){
+ return {cycle,getCharacter:()=>character,setCharacter:i=>character=((i%cast.length)+cast.length)%cast.length,tap(x,y){if(!bounds||x<bounds.left||x>bounds.right||y<bounds.top||y>bounds.bottom)return null;return cycle()},draw(ctx,w,h,now,bands,sensitivity=1,runSpeed=1,skylineGain=1){
   const dt=last==null?.04:Math.min(.08,Math.max(.001,(now-last)/1000));last=now;
   const energy=Math.sqrt(bands.reduce((s,v)=>s+v*v,0)/32),bass=bands.slice(0,10).reduce((s,v)=>s+v,0)/10,treble=bands.slice(22).reduce((s,v)=>s+v,0)/10;
   silence=energy<.012?silence+dt:0;charging=silence>=2;
@@ -37,7 +38,6 @@ export function createRunner(){let last=null,travel=0,speed=0,silence=0,bassOld=
   for(let i=0;i<32;i++){const slot=w/28,x=((i*slot-travel*.13)%(slot*32)+slot*32)%(slot*32)-slot*2,bh=8+Math.min(1,Math.max(0,bands[i]*skylineGain))*h*.57;
    ctx.fillStyle=i<10?'#103c3e':i<22?'#302043':'#42152f';ctx.fillRect(x,ground-bh,slot-4,bh);
    ctx.fillStyle=i<10?'#27ead5':i<22?'#b782ff':'#ff2397';ctx.fillRect(x,ground-bh,slot-4,3);
-   ctx.fillStyle='#c7afd955';for(let windowY=ground-12;windowY>ground-bh+7;windowY-=15)ctx.fillRect(x+slot*.35,windowY,3,4);
   }
   ctx.strokeStyle='#44265f';ctx.lineWidth=1;for(let i=0;i<13;i++){const x=((i*w/10-travel)%(w+w/5)+(w+w/5))%(w+w/5)-w/10;ctx.beginPath();ctx.moveTo(x,ground);ctx.lineTo(x-w*.16,h);ctx.stroke()}
   ctx.strokeStyle='#27ead5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,ground);ctx.lineTo(w,ground);ctx.stroke();
@@ -52,6 +52,7 @@ export function createRunner(){let last=null,travel=0,speed=0,silence=0,bassOld=
   const P=(x,z)=>[rx+x*scale,y+z*scale];
   const line=(color,width,a,b)=>{ctx.strokeStyle=color;ctx.lineWidth=width*scale;ctx.beginPath();ctx.moveTo(...P(...a));ctx.lineTo(...P(...b));ctx.stroke()};
   const plate=(color,points)=>{ctx.fillStyle=color;ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(...P(...p)):ctx.moveTo(...P(...p)));ctx.fill()};
+  const bodyStyle=runnerBodies[character];
   const joint=(x,z)=>{ctx.fillStyle=accent;ctx.fillRect(rx+(x-2)*scale,y+(z-2)*scale,4*scale,4*scale)};
   ctx.fillStyle='#271734';ctx.fillRect(rx-22*scale,ground+4,44*scale,4);
   if(!rest&&speed>5){
@@ -64,15 +65,13 @@ export function createRunner(){let last=null,travel=0,speed=0,silence=0,bassOld=
   if(!(rest&&(character===2||character===10))){
   // Far limbs are darker; bent knees and elbows keep both silhouettes readable.
   const backK=rest?(idle.backK??[-6,-15]):jump>0?[-18,-20]:[bkx,bky],backF=rest?(idle.backF??[-8,0]):jump>0?[-28,-31]:[bfx,bfy];
-  line(dark,7,[-3,hipY],backK);line(metal,6,backK,backF);plate('#9d256c',[[backF[0]-4,backF[1]-5],[backF[0]+10,backF[1]-5],[backF[0]+13,backF[1]],[backF[0]-5,backF[1]]]);
-  const farElbow=rest?[-16,hipY-12]:[-ex*.7,ey+bob],farHand=rest?[-9,hipY-2]:[-hx*.7,hy+bob];line(dark,6,[headX-4,hipY-22],farElbow);line(metal,5,farElbow,farHand);
-  plate(metal,[[-9,hipY+2],[5,hipY+4],[headX+8,hipY-21],[headX-8,hipY-27],[-11,hipY-10]]);
-  plate(shine,[[-9,hipY-5],[-3,hipY-3],[headX+1,hipY-22],[headX-6,hipY-24]]);
-  plate(accent,[[0,hipY-15],[7,hipY-17],[5,hipY-11],[-2,hipY-9]]);
+  if(bodyStyle.leg){line(dark,bodyStyle.leg,[-3,hipY],backK);line(metal,bodyStyle.leg-1,backK,backF)}paintRunnerBoot({plate,id:character,foot:backF,color:bodyStyle.boot});
+  const farElbow=rest?[-16,hipY-12]:[-ex*.7,ey+bob],farHand=rest?[-9,hipY-2]:[-hx*.7,hy+bob];line(dark,bodyStyle.arm,[headX-4,hipY-22],farElbow);line(metal,bodyStyle.arm-1,farElbow,farHand);
+  paintRunnerBody({ctx,P,s:scale,id:character,headX,hipY,now,colors:palettes[character]});
   const nearK=rest?(idle.nearK??[7,-16]):jump>0?[21,-29]:[kx,ky],nearF=rest?(idle.nearF??[9,0]):jump>0?[29,-20]:[fx,fy];
-  line(shine,8,[3,hipY],nearK);line(metal,7,nearK,nearF);joint(...nearK);plate('#ff2397',[[nearF[0]-5,nearF[1]-6],[nearF[0]+7,nearF[1]-6],[nearF[0]+15,nearF[1]-2],[nearF[0]+14,nearF[1]+1],[nearF[0]-5,nearF[1]+1]]);
+  if(bodyStyle.leg){line(shine,bodyStyle.leg,[3,hipY],nearK);line(metal,bodyStyle.leg-1,nearK,nearF);joint(...nearK)}paintRunnerBoot({plate,id:character,foot:nearF,color:bodyStyle.boot});
   const elbow=rest?(character===1?[24,-42+Math.sin(now/280)*2]:(idle.elbow??[18,-35])):jump>0?[25,-52]:[ex,ey+bob],hand=rest?(character===1?[37+Math.sin(now/330)*5,-31]:(idle.hand??[24,-25])):jump>0?[37,-60]:[hx,hy+bob];
-  line(shine,6,[headX+4,hipY-22],elbow);line(shine,5,elbow,hand);joint(...elbow);ctx.fillStyle='#ff2397';ctx.fillRect(rx+(hand[0]-3)*scale,y+(hand[1]-3)*scale,7*scale,7*scale);
+  line(shine,bodyStyle.arm,[headX+4,hipY-22],elbow);line(shine,bodyStyle.arm-1,elbow,hand);joint(...elbow);ctx.fillStyle='#ff2397';ctx.fillRect(rx+(hand[0]-3)*scale,y+(hand[1]-3)*scale,7*scale,7*scale);
   if(character===12){const tip=rest?[54,-60]:[hand[0]+16,hand[1]-25];line('#d4b3ff',2,[hand[0]-6,hand[1]+10],tip);ctx.fillStyle='#27ead5';ctx.beginPath();ctx.ellipse(...P(...tip),4*scale,5*scale,0,0,Math.PI*2);ctx.fill()}
   const headY=hipY-50+(rest&&character===1?Math.sin(now/400)*2:0);
   const oval=(color,x,z,rxSize,rySize,outline=true)=>{ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(...P(x,z),rxSize*scale,rySize*scale,0,0,Math.PI*2);ctx.fill();if(outline){ctx.strokeStyle='#090d16';ctx.lineWidth=2*scale;ctx.stroke()}};
@@ -97,15 +96,15 @@ export function createRunner(){let last=null,travel=0,speed=0,silence=0,bassOld=
    ctx.fillStyle=accent;ctx.fillRect(rx+3*scale,y-5*scale,17*scale,4*scale);
   }
   if(rest){ctx.font=Math.round(14*scale)+'px Arial';ctx.fillStyle='#c7afd9';
-   if(character===0){line('#27ead5',2,[24,-25],[38,0]);ctx.fillStyle='#27ead5';ctx.fillRect(rx+32*scale,ground-3,14*scale,6);for(let i=0;i<3;i++){const rise=(now/65+i*13)%44;ctx.fillRect(rx+(39+i*4)*scale,ground-rise*scale,2*scale,2*scale)}ctx.fillStyle='#c7afd9';ctx.fillText('RECHARGING',rx-35*scale,ground+28*scale)}
+   if(character===0){line('#27ead5',2,[24,-25],[38,0]);ctx.fillStyle='#27ead5';ctx.fillRect(rx+32*scale,ground-3,14*scale,6);for(let i=0;i<3;i++){const rise=(now/65+i*13)%44;ctx.fillRect(rx+(39+i*4)*scale,ground-rise*scale,2*scale,2*scale)}ctx.fillStyle='#c7afd9';ctx.fillText('RECHARGING',rx-35*scale,Math.min(ground+28*scale,(ctx.canvas?.height??Infinity)-8))}
    else if(character===1){plate('#34223d',[[20,-30],[62,-30],[67,-20],[17,-20]]);line('#744193',3,[24,-20],[24,0]);line('#744193',3,[59,-20],[59,0]);
     for(const x of [29,53]){ctx.strokeStyle='#ff2397';ctx.lineWidth=2*scale;ctx.beginPath();ctx.ellipse(...P(x,-27),7*scale,2*scale,0,0,Math.PI*2);ctx.stroke();line('#fff1a5',1,[x,-27],[x+Math.cos(now/250)*6,-27+Math.sin(now/250)*2])}
-    ctx.fillStyle='#ff2397';ctx.fillText('AFTERPARTY',rx-28*scale,ground+28*scale)}
-   else if(character===2){for(let i=0;i<3;i++){const rise=(now/80+i*13)%42;ctx.font=Math.round((10+i*3)*scale)+'px Arial';ctx.fillStyle='#b782ff';ctx.fillText('z',rx+(35+rise*.25)*scale,y-(42+rise)*scale)}ctx.font=Math.round(14*scale)+'px Arial';ctx.fillText('CAT NAP',rx-25*scale,ground+28*scale)}
-   else if(character===3){line('#b782ff',1,[6,-20],[45,float]);ctx.fillStyle='#27ead5';ctx.fillRect(rx+40*scale,ground-2,12*scale,4);for(let i=0;i<4;i++){const rise=(now/90+i*12)%45;ctx.fillRect(rx+(-14+i*9)*scale,ground-rise*scale,2*scale,2*scale)}ctx.fillStyle='#c7afd9';ctx.fillText('ZERO-G BREAK',rx-36*scale,ground+28*scale)}
+    ctx.fillStyle='#ff2397';ctx.fillText('AFTERPARTY',rx-28*scale,Math.min(ground+28*scale,(ctx.canvas?.height??Infinity)-8))}
+   else if(character===2){for(let i=0;i<3;i++){const rise=(now/80+i*13)%42;ctx.font=Math.round((10+i*3)*scale)+'px Arial';ctx.fillStyle='#b782ff';ctx.fillText('z',rx+(35+rise*.25)*scale,y-(42+rise)*scale)}ctx.font=Math.round(14*scale)+'px Arial';ctx.fillText('CAT NAP',rx-25*scale,Math.min(ground+28*scale,(ctx.canvas?.height??Infinity)-8))}
+   else if(character===3){line('#b782ff',1,[6,-20],[45,float]);ctx.fillStyle='#27ead5';ctx.fillRect(rx+40*scale,ground-2,12*scale,4);for(let i=0;i<4;i++){const rise=(now/90+i*12)%45;ctx.fillRect(rx+(-14+i*9)*scale,ground-rise*scale,2*scale,2*scale)}ctx.fillStyle='#c7afd9';ctx.fillText('ZERO-G BREAK',rx-36*scale,Math.min(ground+28*scale,(ctx.canvas?.height??Infinity)-8))}
   }
   if(rest&&character>=4)paintCastIdle(ctx,P,scale,character,now,ground,rx);ctx.globalAlpha=1;
-  ctx.font='600 20px Arial';const title=runnerCharacters[character],titleWidth=ctx.measureText?ctx.measureText(title).width:title.length*12;ctx.fillStyle='#08060eb3';ctx.fillRect(12,10,titleWidth+20,30);ctx.fillStyle='#c7afd9';ctx.fillText(title,22,32);
+  ctx.font='600 20px Arial';const title=runnerCharacters[character],titleWidth=ctx.measureText?ctx.measureText(title).width:title.length*12;ctx.fillStyle='#08060eb3';if(label)ctx.fillRect(12,10,titleWidth+20,30);ctx.fillStyle='#c7afd9';if(label)ctx.fillText(title,22,32);
   return {charging:rest,jump,obstacles:obstacles.length,speed,character:runnerCharacters[character],idleAnimation:rest?cast[character][2]:null,bounds};
  }}
 }

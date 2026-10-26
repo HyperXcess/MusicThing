@@ -2,11 +2,13 @@
 
 [Releases](https://github.com/HyperXcess/MusicThing/releases) · [Issues](https://github.com/HyperXcess/MusicThing/issues)
 
-**Retrowave visualizers, animated runners and live lyrics for your Car Thing.**
+**Eight retrowave visualizers, animated characters and timed lyrics for your Car Thing.**
 
-Five audio-reactive effects fill the screen: **EQ Bars**, **Warp Tunnel**, **Synth Grid**, **Spectrum Waves**, and **Beat Runner**. Beat Runner has seventeen characters, moving vector environments, an EQ skyline, bass-triggered hurdles, and a different rest animation for each character when music stops. No audio recordings are saved.
+Audio capture starts automatically. Explore EQ Bars, Warp Tunnel, Synth Grid, Spectrum Waves, Neon Stage, Beat Runner, Beat Fighter and Beat DJ. No audio recordings are saved.
 
-![Three new runners and their pause animations](docs/new-runners.png)
+![Beat DJ live visualizer](docs/visualizer-7.png)
+
+**[Explore the illustrated visualizer and character guide →](docs/VISUAL-GUIDE.md)** — screenshots of all eight effects, all 17 runners, all six fighters and all 20 DJ choices, plus Chrome & Gold’s five new set routines.
 
 ## Requirements
 
@@ -28,14 +30,29 @@ The `musicthing-vVERSION.zip` asset is the installable app. `latest.json` provid
 
 ## Controls
 
-- **Swipe left/right on visuals**, or turn the dial, to cycle effects. Selection is shared with Spotify's original screen, including after leaving fullscreen.
-- **Swipe up/down** to change audio sensitivity (default 1.0×). In Beat Runner this changes running speed instead. **More → Adjust** separates running speed from EQ skyline sensitivity.
-- **Tap anywhere on Beat Runner** to cycle its seventeen characters. Each has a distinct environment and silence animation. New female runners include Nova Dash (courier with a route map), Captain Lyra (pilot with a floating star chart), and Pixel Vee (drummer with a sound-check break). Hurdles are triggered by bass changes and travel toward the runner; this is not exact beat-grid synchronization.
-- **Expand** hides the player row. Tap other visual effects to restore controls, or use the lower-left **↙** control; the latter also works for Beat Runner, whose taps cycle characters.
-- **More** contains the effect picker, Pause/Resume visuals, Adjust, Lyrics, Up Next, Recent and Devices. Swiping a visualizer changes effects, never these pages.
-- **♫ Lyrics**, beneath the runner name, toggles an optional upper-right lyric overlay. The current line uses small regular text; the next line is dimmer. No text background. Preference persists across the two visualizer views and fullscreen.
+| Action | Result |
+| --- | --- |
+| Swipe left/right on visuals, or turn the dial | Change visualizer; selection also persists underneath Spotify |
+| Swipe up/down on a non-character effect | Change sensitivity, initially 1.0× |
+| Swipe up/down on Runner, Fighter or DJ | Change that mode’s independent animation pace |
+| Tap a character visualizer | Cycle characters without stopping the animation |
+| Tap the character name ▾ | Open a compact, scrollable character dropdown |
+| Tap the music-note icon left of the name | Toggle timed lyrics in the upper-right background |
+| Expand | Hide the compact playback row; restore with the lower-left control |
+| More → Adjust | Adjust pace separately from audio/EQ reaction |
+| More | Effect picker, visual pause, Lyrics, Up Next, Recent and Devices |
 
-On the original Spotify screen, swipe sideways to cycle artwork and effects. Swipe up on artwork to show EQ Bars. The native Spotify playback controls remain available above the visualizer. Up/down over an effect changes sensitivity or runner speed. MusicThing's own view uses one compact player row; it suppresses the duplicate native mini-player.
+On the original Spotify screen, swipe sideways to cycle artwork and effects; swipe up on artwork to show EQ Bars. Spotify’s playback controls remain above the preview. MusicThing’s own screen uses a compact player row. Header controls stay in fixed positions, away from the physical dial.
+
+## Character modes
+
+**Beat Runner:** seventeen distinct bodies and moving vector environments, a clean EQ skyline, bass-triggered hurdles, animated trails and individual silence animations. Speed and skyline sensitivity are separate. Hurdles respond to audio onsets and then travel toward the runner; this is not exact beat-grid synchronization.
+
+**Beat Fighter:** six fighters, including Master Jin and The Bride, with varied targets, spinning kicks, jumps, ducks and character-specific strikes. Fighters hold a breathing ready stance between encounters. The shared Spectrum Waves effect remains behind them at reduced opacity; static arena scenery is removed. Silence animations retain their captions. Combat pace is independent of Runner and DJ speed.
+
+**Beat DJ:** twenty choices, alphabetized with Guest Set and Full Crew last. Distinct bodies, faces and outfits accompany scratches, fader moves, headphone checks, crowd gestures, occasional headbangs and character-specific quiet activities. DJ Couture takes peace-sign selfies; Toast Malone has an occasional toast/fire routine; Bubble Pop uses a bubble wand. Chrome & Gold share one two-platter table and trade mixing/hype roles, with five additional smoothly blended routines. Full Crew caps the scene at eight characters to limit rendering load.
+
+See the [visual guide](docs/VISUAL-GUIDE.md) for every character and effect.
 
 ## Lyrics and Spotify permissions
 

@@ -24,10 +24,21 @@ main,header,#transport,.now-playing{gap:0}main>header{margin-bottom:6px}header>*
 
 #sensitivityHud{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:8;pointer-events:none;opacity:0;transition:opacity 250ms;background:rgba(16,8,27,.74);border:1px solid #b782ff88;border-radius:18px;padding:18px 30px;text-align:center;min-width:190px}#sensitivityHud.show{opacity:1}#sensitivityHud span{display:block;font-size:21px;color:#c7afd9}#sensitivityHud strong{display:block;font-size:48px;color:#27ead5}#sensitivityHud small{font-size:17px;color:#c7afd9}.sensitivity-meter{height:90px;width:18px;margin:8px auto 12px;background:#74419366;border-radius:9px;position:relative;overflow:hidden}#sensitivityHudFill{position:absolute;left:0;bottom:0;width:100%;background:#27ead5;box-shadow:0 0 14px #27ead5}
 
-.beat-runner #captureStatus{top:auto;bottom:8px}
+#captureStatus{top:auto;bottom:8px}
 
 #runnerAdjust .sensitivity+.sensitivity{margin-top:12px}#runnerAdjust .sensitivity span{font-size:21px}
 
 .lyrics-toolbar{position:sticky;top:0;z-index:3;display:flex;align-items:center;background:#08060e;padding:0 0 8px}.lyrics-toolbar #refreshLyrics{position:static;width:auto;min-width:120px;margin:0 12px 0 0}.lyrics-toolbar #followLyrics{margin-right:12px;background:#744193;min-width:145px}#lyricMode{font-size:16px;color:#c7afd9}#lyricText{padding-bottom:45%;padding-top:12px}.lyric-line{margin:0 0 26px;padding:8px 10px;color:#8e7a9e;line-height:1.4;font-size:28px;transition:color 180ms,background 180ms;border-radius:8px;white-space:pre-wrap}.lyric-line.current{color:#27ead5;background:#211431;font-weight:700}
 
 #restoreControls{display:none;position:absolute;left:16px;bottom:18px;z-index:12;min-width:52px;min-height:48px;padding:4px;background:#160e21b8;font-size:28px}.visual-full #restoreControls{display:block}
+
+#transport button,#fullscreen,#menuToggle{display:flex;align-items:center;justify-content:center;width:56px;min-width:56px!important;height:56px;padding:12px}#transport button svg,#fullscreen svg,#menuToggle svg,#restoreControls svg{display:block;pointer-events:none}#restoreControls{padding:10px}#restoreControls svg{margin:auto}
+
+#motionSpeedLabel{display:inline}
+
+#backdropReactionLabel{display:inline}
+
+/* Fixed slots keep transport controls anchored while titles and state change. */
+header{display:grid;grid-template-columns:78px 56px minmax(0,1fr) 180px 56px;grid-column-gap:8px}header>*+*{margin-left:0}#transport{width:180px}.now-playing{overflow:hidden}#followLyrics[hidden]{display:block!important;visibility:hidden;pointer-events:none}.menu-actions button{font-weight:400}.menu-actions button.active{font-weight:400}
+
+#closeMenu{display:flex;align-items:center;justify-content:center;min-width:144px;min-height:56px;background:#173431;border:2px solid #27ead5;color:#bafff4}#closeMenu svg{display:block;pointer-events:none;margin-right:10px}

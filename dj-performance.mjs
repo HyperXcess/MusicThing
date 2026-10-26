@@ -1,0 +1,25 @@
+const ease=v=>{const x=Math.max(0,Math.min(1,v));return x*x*(3-2*x)};
+export function handRoutine(clock,energy,rest,index=0){const phase=(clock/1000+index*2.7)%29,amount=!rest&&energy>.015&&phase<4?ease(Math.min(phase/.5,(4-phase)/.5)):0,type=['wrist flex','double horns','OK flourish'][(Math.floor((clock/1000+index*2.7)/29)+index)%3],swing=Math.sin(phase*8)*7;return{amount,type,left:[-35+swing,-102],right:[35+swing,-102],phase}}
+export function toastRoutine(clock,energy,rest){const phase=(clock/1000+8)%36,active=!rest&&energy>.015&&phase<7.5,stage=!active?'mix':phase<1?'heat dial':phase<3?'burning':phase<4.1?'toast pop':phase<5.2?'blow out':phase<6.6?'toast toss':'smug nod',amount=active?ease(Math.min(phase/.3,(7.5-phase)/.3)):0;let left=[-32,-40],right=[42,-63];if(stage==='heat dial')right=[39,-65];if(stage==='toast pop'){left=[-5,-119+(phase-3)*45];right=[40,-91]}if(stage==='blow out')left=[-13,-66];if(stage==='toast toss'){const t=(phase-5.2)/1.4;left=[-13+t*80,-66-t*15]}return{phase,active,stage,amount,left,right,toss:Math.max(0,Math.min(1,(phase-5.2)/1.4))}}
+export function bubbleRoutine(clock,energy,rest){const phase=(clock/1000+5)%26,active=!rest&&energy>.015&&phase<7,stage=phase<1?'dip wand':phase<2?'raise wand':phase<4.2?'blowing bubbles':'watch bubbles',raise=ease((phase-1)/.8);return{active,phase,stage,blowing:active&&stage==='blowing bubbles',amount:active?ease(Math.min(phase/.25,(7-phase)/.5)):0,left:[-32,17],right:[-15+raise*46,18-raise*60]}}
+
+export function paintHandRoutine({routine,left,right,skin,accent,line,oval,poly}){if(routine.amount<.35)return;for(const [side,[x,y]]of [[-1,left],[1,right]]){
+ if(routine.type==='wrist flex'){const gold=accent==='#ffcf56';line([[x-8,y+8],[x+8,y+8]],gold?'#e7bd56':'#82748f',7);poly([[x-6,y+3],[x+6,y+3],[x+6,y+13],[x-6,y+13]],gold?'#fff0b0':'#d5e8f5');line([[x,y+5],[x,y+9],[x+3,y+9]],'#3a3049',1);const spark=Math.sin(routine.phase*10+side);if(spark>.3){line([[x+10,y],[x+18,y]],'#fff5c9',1);line([[x+14,y-4],[x+14,y+4]],'#fff5c9',1)}}
+ else if(routine.type==='double horns'){for(const dx of [-5,6]){line([[x+dx,y],[x+dx*1.5,y-18]],'#211b29',6);line([[x+dx,y],[x+dx*1.5,y-18]],skin,3.5)}line([[x,y+2],[x+side*11,y-5]],skin,4)}
+ else{oval(x-side*4,y-5,5,6,skin);oval(x-side*4,y-5,2.2,3,'#171324',null);for(let j=0;j<3;j++){const dx=-3+j*6;line([[x+dx,y-2],[x+dx*1.6,y-19+j*2]],'#211b29',5.5);line([[x+dx,y-2],[x+dx*1.6,y-19+j*2]],skin,3)}}
+ }}
+export function paintToastRoutine({routine,clock,poly,oval,line,ctx}){if(!routine.active)return;const {stage,phase,toss}=routine;
+ const toast=(x,y,size,burnt)=>{ctx.save();ctx.translate(x,y);ctx.scale(size,size);poly([[-12,9],[-12,-6],[-16,-9],[-15,-17],[-7,-21],[8,-21],[16,-16],[15,-9],[12,-6],[12,9]],burnt?'#79503b':'#e8b86f');poly([[-8,5],[-8,-9],[-11,-12],[-8,-16],[8,-16],[11,-12],[8,-9],[8,5]],burnt?'#3a2c29':'#f7d69a');ctx.restore()};
+ if(stage==='heat dial')line([[40,-65],[40+Math.cos(phase*15)*6,-65+Math.sin(phase*15)*6]],'#ffe08b',2);
+ if(stage==='burning'||stage==='toast pop'){for(let i=0;i<5;i++){const x=-20+i*10,wiggle=Math.sin(clock/70+i)*4;poly([[x-6,-119],[x-8,-133],[x-3,-128],[x+wiggle,-145-i%2*4],[x+6,-127],[x+5,-118]],i%2?'#ffad36':'#ed5d32');line([[x,-148],[x+wiggle,-157],[x-wiggle,-166]],'#a99aa9',1.2)}line([[-27,-119],[27,-119]],'#ffad36',4)}
+ if(stage==='toast pop')toast(-5,-116+(phase-3)*45,1,true);
+ if(stage==='blow out'){toast(-13,-66,1,true);for(let j=0;j<3;j++)line([[5,-71+j*4],[-4,-74+j*4],[-15,-72+j*4]],'#d4d8ef',1);line([[-12,-93],[-14+Math.sin(clock/90)*3,-107]],'#a99aa9',1)}
+ if(stage==='toast toss'){toast(-13+toss*115,-66-Math.sin(toss*Math.PI)*35+toss*toss*170,1+toss*2.8,true);for(let i=0;i<6;i++)oval(-5+i*11+toss*42,-30+i*7+toss*65,1.5,1.5,'#c6945b',null)}
+ if(stage==='smug nod')for(let i=0;i<4;i++)oval(-20+i*15,5+(phase-6.6)*30,1.3,1.3,'#c6945b',null);
+}
+export function paintBubbleParty({routine,clock,ctx,oval,line,poly,left,right}){if(!routine.active)return;const [lx,ly]=left,[rx,ry]=right,ring=[rx-14,ry-24];
+ poly([[lx-8,ly-12],[lx+8,ly-12],[lx+9,ly+12],[lx-9,ly+12]],'#80c9ce','#396d7c');oval(lx,ly-12,8,3,'#b2eee5');line([[lx-4,ly-1],[lx+4,ly-1]],'#e8fcf6',3);
+ line([[rx,ry],[ring[0],ring[1]+5]],'#ed8fbb',3);ctx.beginPath();ctx.ellipse(ring[0],ring[1],5.5,7,0,0,Math.PI*2);ctx.strokeStyle='#f8bfdc';ctx.lineWidth=2;ctx.stroke();
+ if(routine.blowing){line([[6,-63],[11,-64]],'#c7e6ed',.8);ctx.save();ctx.globalAlpha=.2;oval(ring[0]+4,ring[1],5,6,'#b8f5e5',null);ctx.restore()}
+ for(let i=0;i<15;i++){const age=routine.phase-2-i*.15;if(age<0||age>3.5)continue;const x=17+8+age*(25+i%3*10)+Math.sin(age*2+i)*3,y=-66-age*(14+i%4*8),r=4+i%5*1.4;ctx.save();ctx.globalAlpha=Math.max(0,.65-age*.13);ctx.beginPath();ctx.ellipse(x,y,r,r,0,0,Math.PI*2);ctx.fillStyle=['#f1b3d8','#c6b5ed','#a4e6d6'][i%3];ctx.globalAlpha*=.25;ctx.fill();ctx.globalAlpha=Math.max(0,.7-age*.14);ctx.strokeStyle=['#f1b3d8','#c6b5ed','#a4e6d6'][i%3];ctx.lineWidth=1;ctx.stroke();line([[x-r*.35,y-r*.4],[x,y-r*.65]],'#fff',1);ctx.restore()}
+}
