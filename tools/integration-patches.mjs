@@ -2,7 +2,7 @@ export const bundleSpecs=[
  {file:'index-BoMDv8nD.js',v:'ye',app:'l',dispatch:'Se',method:'async handleServerAction(o){',arg:'o',pref:'$',buttons:'de',jsx:'u',view:'s'},
  {file:'index-legacy-DSl9FxfH.js',v:'t',app:'e',dispatch:'k',method:'async handleServerAction(e){',arg:'e',pref:'bt',buttons:'Gt',jsx:'m',view:'n'}
 ];
-export function patchBundle(source,spec){source=source.replace('const previous=window.__hyperMusicReturnApp||"spotify";','const remembered=window.__hyperMusicReturnApp;const previous=remembered&&!["landing","settings","musicthing"].includes(remembered)?remembered:"spotify";');
+export function patchBundle(source,spec){source=patchSongMetadata(source);source=source.replace('const previous=window.__hyperMusicReturnApp||"spotify";','const remembered=window.__hyperMusicReturnApp;const previous=remembered&&!["landing","settings","musicthing"].includes(remembered)?remembered:"spotify";');
  const {v,app,dispatch,arg,pref,buttons,method,view}=spec;
  const forwarded=`(${v}.app==${app}||${app}==="spotify"&&${v}.app==="musicthing"&&(${v}.type==="visualizer-frame"||${v}.type==="music-result"))&&${dispatch}(${v})`;
  if(!source.includes(forwarded)){
@@ -21,3 +21,11 @@ export function patchBundle(source,spec){source=source.replace('const previous=w
  return source;
 }
 export function patchSpotifyIndex(source){if(source.includes('musicthing-link.js'))return source;if(!source.includes('</body>'))throw Error('Spotify client index has no body end');return source.replace('</body>','<script src="./musicthing-link.js"></script></body>')}
+
+// Artwork may already be proxied; skip rewriting it, never the song update.
+export function patchSongMetadata(source){
+ const edits=[
+ ['if(s.thumbnail.includes("".concat(v.ip,":").concat(v.port)))return;s.thumbnail="http://".concat(v.ip,":").concat(v.port,"/proxy/v1?url=").concat(encodeURIComponent(s.thumbnail))','/*music-song-metadata*/if(!s.thumbnail.includes("".concat(v.ip,":").concat(v.port)))s.thumbnail="http://".concat(v.ip,":").concat(v.port,"/proxy/v1?url=").concat(encodeURIComponent(s.thumbnail))'],
+ ['if(n.thumbnail.includes(`${e.ip}:${e.port}`))return;n.thumbnail=`http://${e.ip}:${e.port}/proxy/v1?url=${encodeURIComponent(n.thumbnail)}`','/*music-song-metadata*/if(!n.thumbnail.includes(`${e.ip}:${e.port}`))n.thumbnail=`http://${e.ip}:${e.port}/proxy/v1?url=${encodeURIComponent(n.thumbnail)}`']
+ ];for(const [before,after] of edits)source=source.replace(before,after);return source;
+}

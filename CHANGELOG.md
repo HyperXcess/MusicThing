@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 — 2026-10-26
+
+Fix DeskThing’s song metadata handler stopping when artwork is already locally proxied. Titles, artists and playback state continue updating, without repeatedly proxying the same image. Includes modern/legacy regression coverage.
+
 ## 0.2.0 — 2026-10-26
 
 - Add Neon Stage, Beat Fighter and Beat DJ, bringing the collection to eight visualizers.
