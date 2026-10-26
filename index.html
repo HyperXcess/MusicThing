@@ -1,0 +1,34 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MusicThing</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<header>
+ <button id="back" aria-label="Back to previous app">‹ Back</button>
+ <button id="fullscreen" aria-label="Full screen" title="Full screen">Expand</button>
+ <div class="now-playing"><strong id="track">Connecting to Spotify…</strong><small id="playbackDevice">Spotify playback</small></div>
+ <div id="transport" role="group" aria-label="Spotify playback"><button id="previousTrack" aria-label="Previous Spotify track" disabled>Prev</button><button id="togglePlayback" aria-label="Play Spotify" disabled>Play</button><button id="nextTrack" aria-label="Next Spotify track" disabled>Next</button></div>
+ <button id="menuToggle" aria-controls="musicMenu" aria-expanded="false">More</button>
+
+</header>
+<section id="visualizer"><div class="canvas-wrap"><button id="restoreControls" aria-label="Show MusicThing controls">↙</button><canvas id="scope" width="760" height="300"></canvas><canvas id="gpu" width="760" height="300" hidden></canvas><div id="sensitivityHud" aria-live="polite"><span id="gestureHudLabel">Sensitivity</span><strong id="sensitivityHudValue">1.0×</strong><div class="sensitivity-meter"><i id="sensitivityHudFill"></i></div><small>↑ more · ↓ less</small></div><span id="captureStatus">Connecting to Mac audio…</span></div></section>
+<section id="video" hidden><div class="row" hidden><button id="loadVideo">Load current track</button><button id="videoExample">Try video example</button><button id="stopVideo">Close video</button></div><div id="embed"></div></section>
+<section id="lyrics" hidden><div class="lyrics-toolbar"><button id="refreshLyrics">Refresh</button><button id="followLyrics" hidden>Follow live</button><span id="lyricMode">Lyrics · LRCLIB</span></div><div id="lyricText">Loading lyrics…</div></section>
+<section id="queue" class="scroll" hidden><div class="list" id="queueList"></div></section>
+<section id="recent" class="scroll" hidden><div class="list" id="recentList"></div></section>
+<section id="devices" class="scroll" hidden><div class="list" id="deviceList"></div></section>
+<footer id="status" role="status"></footer>
+</main>
+<aside id="musicMenu" role="dialog" aria-modal="true" aria-label="MusicThing options" hidden><div class="menu-card">
+ <div class="menu-heading"><button id="closeMenu">‹ Back</button><strong>MusicThing</strong></div>
+ <div class="menu-body">
+  <div class="menu-pages"><h2>Explore</h2><nav id="tabs" role="tablist" aria-label="Music pages"></nav></div>
+  <div class="menu-visuals">
+   <div id="effectPicker"><h2>Visual effects</h2><div class="modes" id="modes"></div><div class="menu-actions"><button id="capture">Pause visuals</button><button id="openAdjust">Adjust</button></div></div>
+   <div id="visualAdjust" hidden><button id="closeAdjust">‹ Effects</button>
+    <div id="generalAdjust"><h2>Sensitivity</h2><label class="sensitivity" for="sensitivity"><span>Audio reaction <strong id="sensitivityValue">1.0×</strong></span><input id="sensitivity" type="range" min="0.5" max="4" step="0.1" value="1" aria-label="Visual sensitivity"><small>Subtle ← → Intense</small></label><p class="hint">Swipe up or down on the visualizer to adjust.</p></div>
+    <div id="runnerAdjust" hidden><label class="sensitivity" for="runnerSpeed"><span>Running speed <strong id="runnerSpeedValue">1.0×</strong></span><input id="runnerSpeed" type="range" min="0.5" max="2.5" step="0.1" value="1" aria-label="Running speed"></label><label class="sensitivity" for="skylineSensitivity"><span>EQ skyline <strong id="skylineSensitivityValue">1.0×</strong></span><input id="skylineSensitivity" type="range" min="0.1" max="2" step="0.1" value="1" aria-label="EQ skyline sensitivity"></label></div>
+   </div>
+   <span id="modeHint" hidden></span>
+  </div>
+ </div>
+</div></aside>
+<script src="app.js"></script></body></html>

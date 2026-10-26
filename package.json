@@ -1,0 +1,29 @@
+{
+  "name": "musicthing",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test *.test.mjs",
+    "package": "node tools/package.mjs"
+  },
+  "dependencies": {
+    "@deskthing/client": "0.11.2",
+    "@deskthing/server": "0.11.6",
+    "@deskthing/types": "0.11.6"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  },
+  "author": "HyperXcess",
+  "license": "MIT",
+  "description": "Audio-reactive visualizers, animated runners and timed Spotify lyrics for DeskThing",
+  "homepage": "https://github.com/HyperXcess/MusicThing",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HyperXcess/MusicThing.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HyperXcess/MusicThing/issues"
+  }
+}
