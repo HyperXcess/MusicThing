@@ -1,7 +1,9 @@
+import {createPlaybackSync} from './playback-sync.mjs';
 import {setButtonIcon} from './icons.mjs';import {createDeskThing} from '@deskthing/client';import {createVisuals,modes} from './visuals.mjs';import {createLyricOverlay} from './lyric-overlay.mjs';import {lyricIndex,playbackPosition} from './lyrics-sync.mjs';
 const api=createDeskThing(),$=id=>document.getElementById(id),visuals=createVisuals($('scope'),$('gpu'));let tab='visualizer',mode=0,visualFull=false,menuOpen=false,capturing=false,playing=null,sequence=0,visible=true,overlay=false,audioWanted=true,videoId=null,transportPending=false,transportTimer=null,requests=new Map(),runSpeed=1;
 api.overrideKeys(['wheel']);
 for(const [id,icon]of [['previousTrack','previous'],['togglePlayback','play'],['nextTrack','next'],['menuToggle','more'],['fullscreen','expand'],['restoreControls','collapse']])setButtonIcon($(id),icon);
+const playbackSync=createPlaybackSync({api,visuals});
 createLyricOverlay({api,visuals,root:$('visualizer').querySelector('.canvas-wrap'),active:()=>tab==='visualizer'&&visible&&!document.hidden&&!overlay});
 function replace(root,...items){root.textContent='';root.append(...items)}
 const tabs=[['visualizer','Visuals'],['lyrics','Lyrics'],['queue','Up Next'],['recent','Recent'],['devices','Devices']];
@@ -34,7 +36,7 @@ function setFull(full){setMenu(false);visualFull=full;document.body.classList.to
 $('fullscreen').onclick=()=>setFull(true);$('restoreControls').onclick=()=>setFull(false);
 $('capture').onclick=()=>{audioWanted=!audioWanted;capture(audioWanted)};
 function transportState(){for(const id of ['previousTrack','togglePlayback','nextTrack'])$(id).disabled=transportPending||!playing?.device;setButtonIcon($('togglePlayback'),playing?.playing?'pause':'play');$('togglePlayback').setAttribute('aria-label',playing?.playing?'Pause Spotify':'Play Spotify');$('playbackDevice').textContent=playing?.device||'Open Spotify and choose a speaker';}
-function playbackControl(command){if(transportPending||!playing?.device)return;transportPending=true;transportState();request('transport',command);clearTimeout(transportTimer);transportTimer=setTimeout(()=>{transportPending=false;transportState();$('status').textContent='Playback response timed out. Check Spotify and try again.'},14000)}
+function playbackControl(command){if(transportPending||!playing?.device)return;if(command==='pause'||command==='resume')playbackSync.set(command==='resume');transportPending=true;transportState();request('transport',command);clearTimeout(transportTimer);transportTimer=setTimeout(()=>{transportPending=false;transportState();$('status').textContent='Playback response timed out. Check Spotify and try again.'},14000)}
 $('previousTrack').onclick=()=>playbackControl('previous');$('nextTrack').onclick=()=>playbackControl('next');$('togglePlayback').onclick=()=>playbackControl(playing?.playing?'pause':'resume');
 function embed(id){if(!/^[A-Za-z0-9]{22}$/.test(id||'')){$('status').textContent='Start a Spotify track first.';return}videoId=id;replace($('embed'),node('p','Connecting the Spotify player through your Mac…','hint'));request('video-ready');}
 function mountEmbed(){const id=videoId;if(!id)return;const frame=node('iframe');frame.src='https://open.spotify.com/embed/track/'+id;frame.title='Spotify official player';frame.allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';frame.setAttribute('allowfullscreen','');replace($('embed'),frame);$('status').textContent='Official Spotify player · video availability depends on the track and browser.';}

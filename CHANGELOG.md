@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.6 — 2026-10-26
+
+- Synchronize Spotify pause/resume with character quiet modes, including group scenes, runners and fighters.
+- Expire stale audio frames and prevent delayed playback polling from overriding a newer pause event.
+- Forward native Spotify song-state updates to MusicThing.
+- Keep startup compatible with Car Thing’s Chromium 69; add a regression check without globalThis.
+
+
 ## 0.2.5 — 2026-10-26
 
 - Add Deadpan, Zest and Chiseled with distinct bodies, facial artwork and quiet activities.

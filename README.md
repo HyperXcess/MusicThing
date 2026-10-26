@@ -44,6 +44,8 @@ The `musicthing-vVERSION.zip` asset is the installable app. `latest.json` provid
 
 On the original Spotify screen, swipe sideways to cycle artwork and effects; swipe up on artwork to show EQ Bars. Spotify’s playback controls remain above the preview. MusicThing’s own screen uses a compact player row. Header controls stay in fixed positions, away from the physical dial.
 
+Pausing Spotify switches characters into their quiet activities immediately; resuming returns to performance. Native song-state updates are shared between MusicThing and the Spotify preview. Stale audio frames expire rather than keeping a character running.
+
 ## Character modes
 
 **Beat Runner:** seventeen distinct bodies and moving vector environments, a clean EQ skyline, bass-triggered hurdles, animated trails and individual silence animations. Speed and skyline sensitivity are separate. Hurdles respond to audio onsets and then travel toward the runner; this is not exact beat-grid synchronization.

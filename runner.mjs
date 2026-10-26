@@ -20,10 +20,10 @@ const palettes=cast.map(c=>c[1]);
 // Canvas-only arcade runner: fixed camera, beat obstacles, automatic jumps.
 export function createRunner({label=true}={}){let last=null,travel=0,speed=0,silence=0,bassOld=0,cooldown=0,jump=0,velocity=0,obstacles=[],charging=false,character=0,bounds=null,idleBlend=0;
  const cycle=()=>{character=(character+1)%cast.length;return {index:character,name:runnerCharacters[character]}};
- return {cycle,getCharacter:()=>character,setCharacter:i=>character=((i%cast.length)+cast.length)%cast.length,tap(x,y){if(!bounds||x<bounds.left||x>bounds.right||y<bounds.top||y>bounds.bottom)return null;return cycle()},draw(ctx,w,h,now,bands,sensitivity=1,runSpeed=1,skylineGain=1){
+ return {cycle,getCharacter:()=>character,setCharacter:i=>character=((i%cast.length)+cast.length)%cast.length,tap(x,y){if(!bounds||x<bounds.left||x>bounds.right||y<bounds.top||y>bounds.bottom)return null;return cycle()},draw(ctx,w,h,now,bands,sensitivity=1,runSpeed=1,skylineGain=1,forcedRest=false){if(forcedRest){bands=Array(32).fill(0);jump=0;velocity=0;obstacles=[];}
   const dt=last==null?.04:Math.min(.08,Math.max(.001,(now-last)/1000));last=now;
   const energy=Math.sqrt(bands.reduce((s,v)=>s+v*v,0)/32),bass=bands.slice(0,10).reduce((s,v)=>s+v,0)/10,treble=bands.slice(22).reduce((s,v)=>s+v,0)/10;
-  silence=energy<.012?silence+dt:0;charging=silence>=2;
+  silence=energy<.012?silence+dt:0;charging=forcedRest||silence>=2;
   const target=charging?0:w*.29*runSpeed;speed+=(target-speed)*Math.min(1,dt*3);travel+=speed*dt;cooldown=Math.max(0,cooldown-dt);
   const hit=bass-bassOld;bassOld=bass;
   if(!charging&&cooldown===0&&bass>.07&&hit>.025){obstacles.push({x:w+25,height:Math.min(h*.27,18+Math.pow(bass,.7)*sensitivity*h*.12),jumped:false});cooldown=.9}

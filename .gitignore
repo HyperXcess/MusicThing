@@ -8,3 +8,5 @@ release/
 swift-cache/
 audio-control
 private/
+
+/node_modules

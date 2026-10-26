@@ -1,3 +1,4 @@
+import {createPlaybackSync} from './playback-sync.mjs';
 import {createLyricOverlay} from './lyric-overlay.mjs';
 import {createDeskThing} from '@deskthing/client';
 import {createVisuals,modes} from './visuals.mjs';
@@ -8,6 +9,7 @@ document.body.append(layer);const canvases=layer.querySelectorAll('canvas'),labe
 const toast=document.createElement('div');toast.style.cssText='position:fixed;left:50%;top:52%;transform:translate(-50%,-50%);z-index:60;pointer-events:none;background:rgba(16,8,27,.72);border:1px solid #b782ff77;border-radius:18px;padding:18px 28px;color:#fff;text-align:center;font:25px Arial;opacity:0;transition:opacity 220ms';document.body.append(toast);let toastTimer=null;
 function effectHint(index,name){clearTimeout(toastTimer);toast.textContent=name||(index<0?'Artwork':modes[index])+' · '+(index+2)+' / '+(modes.length+1);toast.style.opacity='1';toastTimer=setTimeout(()=>toast.style.opacity='0',1200)}
 const visuals=createVisuals(canvases[0],canvases[1]);let selection=-1,skylineGain=1,runSpeed=1,gain=1,visible=true,overlay=false,gesture=null,suppress=0,fade=null;
+const playbackSync=createPlaybackSync({api,visuals});
 createLyricOverlay({api,visuals,root:layer,scopeApp:'musicthing',active:()=>selection>=0&&visible&&!document.hidden&&!overlay});
 try{gain=Number(localStorage.getItem('musicthing-sensitivity-v2'))||1}catch{}visuals.setSensitivity(gain);try{skylineGain=Number(localStorage.getItem('musicthing-skyline-sensitivity'))||1}catch{}visuals.setSkylineSensitivity(skylineGain);
 function capture(){const active=selection>=0&&visible&&!document.hidden&&!overlay;visuals.setEnabled(active);api.send({app:'musicthing',type:'visualizer',payload:{active,owner:'spotify'}})}

@@ -4,9 +4,10 @@ export const bundleSpecs=[
 ];
 export function patchBundle(source,spec){source=patchSongMetadata(source);source=source.replace('const previous=window.__hyperMusicReturnApp||"spotify";','const remembered=window.__hyperMusicReturnApp;const previous=remembered&&!["landing","settings","musicthing"].includes(remembered)?remembered:"spotify";');
  const {v,app,dispatch,arg,pref,buttons,method,view}=spec;
- const forwarded=`(${v}.app==${app}||${app}==="spotify"&&${v}.app==="musicthing"&&(${v}.type==="visualizer-frame"||${v}.type==="music-result"))&&${dispatch}(${v})`;
+ const previousForwarded=`(${v}.app==${app}||${app}==="spotify"&&${v}.app==="musicthing"&&(${v}.type==="visualizer-frame"||${v}.type==="music-result"))&&${dispatch}(${v})`;
+ const forwarded=`(${v}.app==${app}||${app}==="musicthing"&&${v}.app==="spotify"&&${v}.type==="song"||${app}==="spotify"&&${v}.app==="musicthing"&&(${v}.type==="visualizer-frame"||${v}.type==="music-result"))&&${dispatch}(${v})`;
  if(!source.includes(forwarded)){
-  const candidates=[`${v}.app==${app}&&${dispatch}(${v})`,`(${v}.app==${app}||${app}==="spotify"&&${v}.app==="musicthing"&&${v}.type==="visualizer-frame")&&${dispatch}(${v})`];
+  const candidates=[previousForwarded,`${v}.app==${app}&&${dispatch}(${v})`,`(${v}.app==${app}||${app}==="spotify"&&${v}.app==="musicthing"&&${v}.type==="visualizer-frame")&&${dispatch}(${v})`];
   const before=candidates.find(x=>source.includes(x));if(!before)throw Error('Unsupported Spotify forwarding: '+spec.file);source=source.replace(before,forwarded);
  }
  const currentArg=spec.file==='index-BoMDv8nD.js'?'s':'n';

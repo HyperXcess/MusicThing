@@ -17,11 +17,11 @@ export function createFighter({spectrum=null,label=true}={}){
  const nextMove=()=>{if(!deck.length){deck=(character===5?katanaDeck:moveDeck).slice();for(let i=deck.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}if(deck[deck.length-1]===lastMove)[deck[0],deck[deck.length-1]]=[deck[deck.length-1],deck[0]]}return lastMove=deck.pop()};
  const cycle=()=>{character=(character+1)%fighters.length;deck=[];return{index:character,name:fighters[character].name}};
  return{cycle,getCharacter:()=>character,setCharacter:i=>{character=((i%fighters.length)+fighters.length)%fighters.length;deck=[]},
- draw(ctx,w,h,now,bands,sensitivity=1,pace=1,skylineGain=1){
+ draw(ctx,w,h,now,bands,sensitivity=1,pace=1,skylineGain=1,forcedRest=false){if(forcedRest){bands=Array(32).fill(0);obstacles=[];attack=null;}
   const dt=last==null?.04:clamp((now-last)/1000,0,.08);last=now;
   const clean=Array.from({length:32},(_,i)=>clamp(Number(bands?.[i])||0,0,1));
   const energy=Math.sqrt(clean.reduce((a,b)=>a+b*b,0)/32),bass=clean.slice(0,10).reduce((a,b)=>a+b,0)/10;
-  silence=energy<.012?silence+dt:0;const resting=silence>=2;restTime=resting?restTime+dt:0;cooldown=Math.max(0,cooldown-dt);
+  silence=energy<.012?silence+dt:0;const resting=forcedRest||silence>=2;restTime=resting?restTime+dt:0;cooldown=Math.max(0,cooldown-dt);
   const scale=Math.max(1.2,Math.min(w/440,h/220))*.84,ground=h*.84;
   const visibleTarget=obstacles.some(o=>!o.hit&&!o.evaded&&o.x<w-15);
   const walking=false;
