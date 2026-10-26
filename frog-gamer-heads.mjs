@@ -23,13 +23,22 @@ export function paintFrogRoyal(ctx,{blink=false,rest=false,now=0}={}){
  ctx.restore();
 }
 export function paintGamerHead(ctx,{blink=false,rest=false,now=0}={}){
- const oval=(x,y,rx,ry,color,outline='#29252b',width=2)=>{ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();if(outline){ctx.strokeStyle=outline;ctx.lineWidth=width;ctx.stroke()}};
- const line=(points,color,width=2)=>{ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke()};
- oval(-48,-78,9,14,'#e7caa1');oval(48,-78,9,14,'#e7caa1');oval(0,-81,49,54,'#edd4aa');oval(0,-57,45,24,'#c8b995',null);oval(0,-67,35,23,'#b2aa91',null);oval(0,-83,9,8,'#e0c093',null);
- // Receding dark hair, heavy cheeks, small spectacles and uneven stubble.
- for(const side of [-1,1]){line([[side*29,-127],[side*43,-117],[side*47,-99],[side*51,-109],[side*48,-86]],'#49372a',10);line([[side*38,-121],[side*50,-125],[side*44,-112]],'#49372a',3)}line([[-20,-129],[-9,-134],[-3,-132]],'#49372a',5);line([[10,-132],[21,-134],[28,-129]],'#49372a',4);
- for(const side of [-1,1]){const x=side*22;oval(x,-103,20,13,'#fbf9ed','#827e77',2);if(blink)line([[x-10,-102],[x+10,-102]],'#433d38',2);else oval(x+3,-104,2,2,'#24232a',null);line([[x-17,-119],[x+12,-121]],'#65503b',2)}line([[-3,-104],[3,-104]],'#827e77',2);line([[-44,-107],[-49,-103]],'#827e77',2);line([[44,-107],[49,-103]],'#827e77',2);
- oval(0,-72,8,3,rest?'#75594c':'#342d2b',null);line([[-9,-46],[0,-43],[11,-46]],'#b9a78b',1.4);
- for(let i=0;i<25;i++){const a=i*2.399,x=Math.cos(a)*(14+i%6*4),y=-64+Math.sin(a)*16;line([[x,y],[x+1,y+1.5]],'#6e6656',.8)}for(const [x,y]of [[-31,-88],[-37,-71],[28,-85],[35,-69],[-18,-83]])oval(x,y,1.3,1.3,'#c88e79',null);
- ctx.beginPath();ctx.ellipse(0,-95,54,49,0,Math.PI,Math.PI*2);ctx.strokeStyle='#342c3e';ctx.lineWidth=6;ctx.stroke();for(const side of [-1,1])oval(side*51,-85,7,15,'#453d50');line([[51,-82],[48,-65],[21,-67]],'#46404e',3);oval(20,-67,4,3,'#26232b');
+ const oval=(x,y,rx,ry,color,stroke='#40382e',width=1.5)=>{ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.stroke()}};
+ const line=(p,color,width=1.5)=>{ctx.beginPath();p.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke()};
+ const shape=(points,fill,stroke=null)=>{ctx.beginPath();ctx.moveTo(...points[0]);for(let i=1;i<points.length;i+=3)ctx.bezierCurveTo(...points[i],...points[i+1],...points[i+2]);if(fill){ctx.closePath();ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.3;ctx.stroke()}};
+ // Match the supplied cut-paper gamer: tall bald forehead, tiny rectangular glasses,
+ // sparse side hair, a broad hanging jaw and irregular stubble rather than a beard.
+ oval(0,-45,40,15,'#e9cea2',null);oval(-50,-83,8,13,'#efd6ac');oval(50,-83,8,13,'#efd6ac');
+ shape([[-48,-105],[-46,-132],[-30,-151],[-6,-151],[23,-153],[44,-138],[49,-109],[57,-86],[52,-57],[34,-46],[17,-34],[-16,-33],[-35,-45],[-58,-58],[-58,-90],[-48,-105]],'#f0d8af','#675c49');
+ shape([[-39,-78],[-29,-89],[-15,-82],[-12,-76],[-6,-87],[9,-89],[18,-78],[33,-86],[44,-77],[43,-62],[39,-47],[10,-41],[-12,-44],[-37,-45],[-46,-57],[-39,-78]],'#bfb398');
+ for(const side of [-1,1]){
+  const x=side*23;ctx.beginPath();ctx.moveTo(x-20,-119);ctx.quadraticCurveTo(x-25,-115,x-22,-101);ctx.quadraticCurveTo(x-19,-96,x+18,-99);ctx.quadraticCurveTo(x+22,-103,x+21,-117);ctx.quadraticCurveTo(x+13,-122,x-20,-119);ctx.closePath();ctx.fillStyle='#f6f5e9';ctx.fill();ctx.strokeStyle='#979182';ctx.lineWidth=1.5;ctx.stroke();if(blink)line([[x-10,-108],[x+11,-108]],'#37332d',1.5);else oval(x-side*5,-112,1.8,2.2,'#292821',null);
+  shape([[side*5,-127],[side*17,-140],[side*30,-134],[side*39,-125]],'#3f3026');
+  shape([[side*35,-134],[side*45,-138],[side*43,-125],[side*51,-121],[side*47,-112],[side*58,-111],[side*48,-102],[side*55,-101],[side*48,-92],[side*41,-98],[side*43,-112],[side*35,-119],[side*35,-134]],'#46372b');
+ }
+ line([[-3,-111],[3,-111]],'#979182',1.6);shape([[-7,-150],[-14,-158],[-8,-160],[-3,-153]],'#46372b');shape([[-2,-151],[5,-161],[12,-160],[4,-151]],'#46372b');line([[0,-153],[15,-156]],'#46372b',1.5);
+ oval(-3,-96,1.7,1.2,'#6f5b42',null);oval(5,-96,1.7,1.2,'#6f5b42',null);line([[-7,-96],[-3,-100],[3,-100],[8,-95]],'#ab987a',1);
+ oval(1,-81,7,2.6,'#2e2b22',null);line([[-17,-57],[-4,-54],[13,-56]],'#9f927a',1);line([[-21,-43],[-2,-39],[18,-43]],'#c1aa88',1);
+ for(let j=0;j<38;j++){const a=j*2.399,r=10+j%9*3,x=Math.cos(a)*r,y=-65+Math.sin(a)*17;line([[x,y],[x+.5,y+1]],'#615a48',.7)}
+ for(const [x,y]of [[-34,-89],[-41,-76],[-30,-73],[-19,-91],[31,-91],[41,-76],[29,-73]])oval(x,y,1.5,1.5,'#d09a83',null);
 }

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.5 — 2026-10-26
+
+- Add Deadpan, Zest and Chiseled with distinct bodies, facial artwork and quiet activities.
+- Redesign AFK with the supplied gamer reference, mixer pose B and keyboard quiet pose D.
+- Remove redundant DJ prefixes from character display names while preserving saved IDs.
+- Refresh the twenty-five-character galleries; Guest Set and Dance Party remain last.
+
 ## 0.2.4 — 2026-10-26
 
 Add DJ Croak & Dagger (royal frog) and DJ AFK (gamer), with distinct bodies, native vector heads, quiet activities and participation in Guest Set/Dance Party. Refresh the galleries for twenty-two DJ choices; existing selections retain their IDs.
