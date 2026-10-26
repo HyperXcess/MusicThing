@@ -29,3 +29,5 @@ export function patchSongMetadata(source){
  ['if(n.thumbnail.includes(`${e.ip}:${e.port}`))return;n.thumbnail=`http://${e.ip}:${e.port}/proxy/v1?url=${encodeURIComponent(n.thumbnail)}`','/*music-song-metadata*/if(!n.thumbnail.includes(`${e.ip}:${e.port}`))n.thumbnail=`http://${e.ip}:${e.port}/proxy/v1?url=${encodeURIComponent(n.thumbnail)}`']
  ];for(const [before,after] of edits)source=source.replace(before,after);return source;
 }
+// A secondary library lookup must never block publishing current playback metadata.
+export function patchSpotifyMetadata(source){return source.replace('const isLiked = await this.checkLiked(currentPlayback.item.id);','/*music-nonblocking-metadata*/const isLiked = undefined;').replace('liked: isLiked[0],','liked: isLiked,')}

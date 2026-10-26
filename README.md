@@ -60,6 +60,8 @@ Timed lyrics from **LRCLIB** highlight and follow playback on the Lyrics page; m
 
 Up Next shows the Spotify queue with playback/queue actions. Devices lists Spotify Connect speakers. Recent requires Spotify's `user-read-recently-played` permission; if the installed Spotify integration has not requested that scope, Spotify returns an error until its authorization is updated. This app does not silently grant new scopes.
 
+The optional integration also removes the Spotify app’s automatic liked-status lookup from its metadata path, so a rate-limited library request cannot hold up the song title. Explicit like actions remain available; automatic heart-state retrieval is omitted.
+
 The backend reuses the existing local DeskThing Spotify integration's token and sends it only to Spotify's API. It does not provide a separate OAuth flow. **Music videos are not supported on the tested Car Thing browser**, which lacks the protected-playback support Spotify requires. Experimental embed code is not exposed in navigation.
 
 ## Optional legacy HTTPS relay

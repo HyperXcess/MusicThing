@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2 — 2026-10-26
+
+- Keep visualizer scenes proportional and centered in fullscreen and Spotify preview.
+- Prevent Spotify’s optional liked-status lookup from blocking track metadata during rate limits. The integration omits automatic liked-status retrieval while retaining explicit like actions.
+
 ## 0.2.1 — 2026-10-26
 
 Fix DeskThing’s song metadata handler stopping when artwork is already locally proxied. Titles, artists and playback state continue updating, without repeatedly proxying the same image. Includes modern/legacy regression coverage.
