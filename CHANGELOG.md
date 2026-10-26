@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3 — 2026-10-26
+
+Rename DJ Scream to DJ Scare and Full Crew to Dance Party. Remove Bubble Pop’s stray hair stroke above her head. Refresh character galleries.
+
 ## 0.2.2 — 2026-10-26
 
 - Keep visualizer scenes proportional and centered in fullscreen and Spotify preview.
@@ -14,7 +18,7 @@ Fix DeskThing’s song metadata handler stopping when artwork is already locally
 - Add Neon Stage, Beat Fighter and Beat DJ, bringing the collection to eight visualizers.
 - Add six fighters, twenty DJ choices, unique runner bodies and illustrated galleries for every effect and character collection.
 - Add Chrome & Gold’s five additional set routines: headphone check, crossfader sweep, double scratch, overhead clap and robot wave.
-- Add DJ Couture, DJ Mellow, DJ Scream, DJ Ibiza and DJ Glitch; shared-table robot duo, Guest Set and an eight-character Full Crew scene.
+- Add DJ Couture, DJ Mellow, DJ Scare, DJ Ibiza and DJ Glitch; shared-table robot duo, Guest Set and an eight-character Dance Party scene.
 - Add expressive performance gestures and individual silence activities, varied fighter targets and katana choreography.
 - Keep live Spectrum Waves behind fighters; remove static arena scenery and walking ground.
 - Add a compact character dropdown while preserving tap-to-cycle. Move the music-note lyrics toggle left of the name.

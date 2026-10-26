@@ -46,7 +46,7 @@ Planted martial artists with varied target heights, strikes and evasions; live S
 
 ## Beat DJ
 
-Twenty selectable DJ scenes, including shared-table Chrome & Gold, Guest Set and Full Crew.
+Twenty selectable DJ scenes, including shared-table Chrome & Gold, Guest Set and Dance Party.
 
 ![Beat DJ screenshot](visualizer-7.png)
 
@@ -64,7 +64,7 @@ Master Jin, Iron Monk, Jade Lotus, Ember Fox, Chrome Fist and The Bride. Distinc
 
 ## DJ collection
 
-The gallery follows the alphabetical picker order, with Guest Set and Full Crew last. Tap the picture to cycle without opening a menu. The music-note button toggles lyrics independently.
+The gallery follows the alphabetical picker order, with Guest Set and Dance Party last. Tap the picture to cycle without opening a menu. The music-note button toggles lyrics independently.
 
 ![All twenty Beat DJ scenes](dj-characters.png)
 

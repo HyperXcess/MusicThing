@@ -50,7 +50,7 @@ On the original Spotify screen, swipe sideways to cycle artwork and effects; swi
 
 **Beat Fighter:** six fighters, including Master Jin and The Bride, with varied targets, spinning kicks, jumps, ducks and character-specific strikes. Fighters hold a breathing ready stance between encounters. The shared Spectrum Waves effect remains behind them at reduced opacity; static arena scenery is removed. Silence animations retain their captions. Combat pace is independent of Runner and DJ speed.
 
-**Beat DJ:** twenty choices, alphabetized with Guest Set and Full Crew last. Distinct bodies, faces and outfits accompany scratches, fader moves, headphone checks, crowd gestures, occasional headbangs and character-specific quiet activities. DJ Couture takes peace-sign selfies; Toast Malone has an occasional toast/fire routine; Bubble Pop uses a bubble wand. Chrome & Gold share one two-platter table and trade mixing/hype roles, with five additional smoothly blended routines. Full Crew caps the scene at eight characters to limit rendering load.
+**Beat DJ:** twenty choices, alphabetized with Guest Set and Dance Party last. Distinct bodies, faces and outfits accompany scratches, fader moves, headphone checks, crowd gestures, occasional headbangs and character-specific quiet activities. DJ Couture takes peace-sign selfies; Toast Malone has an occasional toast/fire routine; Bubble Pop uses a bubble wand. Chrome & Gold share one two-platter table and trade mixing/hype roles, with five additional smoothly blended routines. Dance Party caps the scene at eight characters to limit rendering load.
 
 See the [visual guide](docs/VISUAL-GUIDE.md) for every character and effect.
 
