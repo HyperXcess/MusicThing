@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4 — 2026-10-26
+
+Add DJ Croak & Dagger (royal frog) and DJ AFK (gamer), with distinct bodies, native vector heads, quiet activities and participation in Guest Set/Dance Party. Refresh the galleries for twenty-two DJ choices; existing selections retain their IDs.
+
 ## 0.2.3 — 2026-10-26
 
 Rename DJ Scream to DJ Scare and Full Crew to Dance Party. Remove Bubble Pop’s stray hair stroke above her head. Refresh character galleries.

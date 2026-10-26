@@ -1,14 +1,15 @@
+import {paintFrogRoyal,paintGamerHead} from './frog-gamer-heads.mjs';
 import {paintMelloHead} from './mello-head.mjs';
 import {paintReferenceMask} from './scream-mask.mjs';
 export function knicksExpression(clock,energy,rest){const phase=(clock/1000+6)%27,strength=rest?0:Math.min(1,Math.max(0,energy)*3),stank=0,laugh=phase>=1.7&&phase<3.8?Math.sin((phase-1.7)/2.1*Math.PI)*strength:0;return{stank,laugh}}
 export function djGroove({kind,clock,energy,rest,index=0}){
- const type={mushroom:'shake',eyeball:'shake',squid:'dip',dino:'headbang',yeti:'headbang',toaster:'shake',skull:'headbang',cat:'lean',jellyfish:'dip',cassette:'shake',doberman:'lean',knicks:'dip',bubble:'shake',scream:'lean',mello:'headbang',ibiza:'lean',glitch:'headbang'}[kind],period=kind==='yeti'?14:18+index%3,phase=(clock/1000+index*.73)%period,strength=rest?0:Math.min(1,Math.max(0,energy)*2.5),amount=phase<3?strength*Math.sin(phase/3*Math.PI)**2:0,swing=Math.sin(phase*13);
+ const type={mushroom:'shake',eyeball:'shake',squid:'dip',dino:'headbang',yeti:'headbang',toaster:'shake',skull:'headbang',cat:'lean',jellyfish:'dip',cassette:'shake',doberman:'lean',knicks:'dip',bubble:'shake',scream:'lean',mello:'headbang',ibiza:'lean',glitch:'headbang',frog:'lean',gamer:'headbang'}[kind],period=kind==='yeti'?14:18+index%3,phase=(clock/1000+index*.73)%period,strength=rest?0:Math.min(1,Math.max(0,energy)*2.5),amount=phase<3?strength*Math.sin(phase/3*Math.PI)**2:0,swing=Math.sin(phase*13);
  return{type,amount,angle:amount*(type==='headbang'?swing*.34:type==='shake'?Math.sin(phase*17)*.23:Math.sin(phase*4)*.08),x:type==='shake'?amount*Math.sin(phase*17)*5:0,y:type==='headbang'?amount*(4+swing*7):type==='lean'?amount*6:0,crouch:type==='dip'?amount*23:type==='lean'?amount*9:0,zoom:type==='lean'?1+amount*.12:1};
 }
 // Each head has its own silhouette and face language; all coordinates are local to the DJ.
 export function djHeadReaction({kind,clock,energy,rest,index=0,action=''}){
  const phase=(clock/1000+index*.73)%12,hype=/hype|pump|wave/.test(action),strength=rest?0:Math.min(1,Math.max(0,energy)*2.5),burst=phase<2?Math.sin(phase/2*Math.PI)**2:0,amount=kind==='doberman'?(rest?0:strength*((clock/1000+index*.73)%32<1.8?Math.sin(((clock/1000+index*.73)%32)/1.8*Math.PI)**2:0)):strength*Math.max(burst,hype?(1+Math.sin(clock/400))*.5:0),t=clock/1000,bangPhase=(t+index*.73)%14,groove=djGroove({kind,clock,energy,rest,index}),bang=groove.type==='headbang'?groove.amount:0;
- const names={mushroom:'wink',eyeball:'eye roll',squid:'gasp',dino:'roar',yeti:'headbang',toaster:'toast pop',skull:'cackle',cat:'ear flick',jellyfish:'pulse',cassette:'reel rush',doberman:'howl',knicks:'cheer',bubble:'bubble smile',scream:'silent scream',mello:'helmet nod',ibiza:'festival grin',glitch:'bass face'};
+ const names={mushroom:'wink',eyeball:'eye roll',squid:'gasp',dino:'roar',yeti:'headbang',toaster:'toast pop',skull:'cackle',cat:'ear flick',jellyfish:'pulse',cassette:'reel rush',doberman:'howl',knicks:'cheer',bubble:'bubble smile',scream:'silent scream',mello:'helmet nod',ibiza:'festival grin',glitch:'bass face',frog:'royal nod',gamer:'victory grin'};
  return{amount,headbang:bang,groove,expression:bang>.15?'headbang':amount>.3?names[kind]:rest?'relaxed':'groove',x:Math.sin(t*2.1+index)*strength*2.5+groove.x,y:rest?Math.sin(t)*.8:-Math.abs(Math.sin(t*5+index))*strength*4-amount*(kind==='doberman'?8:2)+groove.y,angle:Math.sin(t*3+index)*strength*.08+amount*(kind==='doberman'?-.11:kind==='cassette'?.12:0)+groove.angle,stretch:kind==='squid'||kind==='jellyfish'?1+amount*.1:1,lookY:kind==='doberman'?-amount*5:kind==='eyeball'?-amount*13:0};
 }
 export function paintDJHead(ctx,{kind,skin,accent,now,clock,energy,rest,index,action}){
@@ -20,7 +21,9 @@ export function paintDJHead(ctx,{kind,skin,accent,now,clock,energy,rest,index,ac
  const eye=(x,y,{slant=0,iris=accent,size=1}={})=>{if(blink||(wink&&x<0)){line([[x-8*size,y],[x,y+2],[x+8*size,y-1]],ink,2.5);return}ctx.save();ctx.translate(x,y);ctx.rotate(slant);oval(0,0,9*size,11*size,white);oval(look,1+reaction.lookY,5.5*size,7.5*size,iris,null);oval(look+1,1+reaction.lookY,3*size,5.5*size,ink,null);oval(look-1,-3,2*size,2.5*size,'#fff',null);line([[-8*size,-5*size],[-3*size,-10*size],[5*size,-9*size]],ink,2.4);ctx.restore()};
  const grin=(x,y,width=15)=>{curve([[x-width,y],[x-width*.4,y+5],[x+width*.4,y+5],[x+width,y-2],[x+width*.7,y+16],[x-width*.7,y+16],[x-width,y]],ink,ink);line([[x-width+4,y+3],[x+width-4,y+2]],white,3)};
  const cheek=(x,y)=>oval(x,y,7,3,'#f08a9c',null);
- if(kind==='ibiza'){
+ if(kind==='frog'){paintFrogRoyal(ctx,{blink,rest,now});
+ }else if(kind==='gamer'){paintGamerHead(ctx,{blink,rest,now});
+ }else if(kind==='ibiza'){
   curve([[-33,-101],[-33,-128],[33,-127],[33,-101],[34,-76],[20,-48],[0,-45],[-22,-48],[-34,-77],[-33,-101]],ink,'#cfa17f',2.5);
   poly([[-35,-97],[-34,-113],[-24,-119],[-30,-132],[-13,-127],[-9,-138],[2,-129],[20,-136],[18,-126],[32,-121],[36,-102],[23,-110],[14,-114],[1,-110],[-12,-114],[-25,-105]],'#927153');line([[-22,-121],[-9,-124],[3,-119]],'#ceb48a',2);line([[6,-124],[17,-125],[26,-114]],'#ceb48a',2);
   eye(-15,-91,{iris:'#72939b',size:.8});eye(15,-91,{iris:'#72939b',size:.8});line([[-24,-103],[-15,-106],[-7,-103]],'#745b45',2);line([[7,-103],[15,-106],[24,-103]],'#745b45',2);line([[0,-87],[-4,-75],[3,-73]],'#986b54',1.3);
@@ -104,7 +107,7 @@ export function paintDJHead(ctx,{kind,skin,accent,now,clock,energy,rest,index,ac
   for(const x of [-17,17]){oval(x,-88,13,13,ink);oval(x,-88,9,9,'#655076',null);for(let i=0;i<3;i++){const a=clock/(450-emote*300)+i*Math.PI*2/3;line([[x,-88],[x+Math.cos(a)*8,-88+Math.sin(a)*8]],accent,2)}oval(x-3,-92,2,2,white,null)}poly([[-17,-63],[17,-63],[24,-49],[-24,-49]],'#382b4f');oval(-11,-54,3,3,'#e3d8ec');oval(11,-54,3,3,'#e3d8ec');line([[-8,-104],[8,-104]],'#714861',2);
  }
  // Headphones sit at the sides, leaving facial features unobstructed.
- if(!['scream','mello'].includes(kind)){
+ if(!['scream','mello','frog','gamer'].includes(kind)){
  ctx.beginPath();ctx.ellipse(0,-87,44,39,0,Math.PI,Math.PI*2);ctx.strokeStyle='#1b1729';ctx.lineWidth=6;ctx.stroke();
  for(const side of [-1,1]){oval(side*41,-81,8,17,'#353047');line([[side*43,-91],[side*43,-72]],accent,3);line([[side*38,-88],[side*38,-76]],'#756b86',1)}
  }
