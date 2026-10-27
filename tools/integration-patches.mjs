@@ -1,3 +1,4 @@
+import {rootTwoFingerBridge} from './two-finger-root.mjs';
 export const bundleSpecs=[
  {file:'index-BoMDv8nD.js',v:'ye',app:'l',dispatch:'Se',method:'async handleServerAction(o){',arg:'o',pref:'$',buttons:'de',jsx:'u',view:'s'},
  {file:'index-legacy-DSl9FxfH.js',v:'t',app:'e',dispatch:'k',method:'async handleServerAction(e){',arg:'e',pref:'bt',buttons:'Gt',jsx:'m',view:'n'}
@@ -19,6 +20,7 @@ export function patchBundle(source,spec){source=patchSongMetadata(source);source
   {marker:'/*music-no-mini-player*/',anchor:`${view}.miniplayer.visible&&${view}.onboarding&&`,text:`${view}.miniplayer.visible&&${view}.onboarding&&${view}.currentView.name!=="musicthing"&&/*music-no-mini-player*/`}
  ];
  for(const edit of edits){if(source.includes(edit.marker))continue;if(!source.includes(edit.anchor))throw Error('Unsupported MusicThing integration: '+spec.file);source=source.replace(edit.anchor,edit.text)}
+ if(!source.includes('/*visualthing-two-finger-root*/'))source=rootTwoFingerBridge+source;
  return source;
 }
 export function patchSpotifyIndex(source){if(source.includes('musicthing-link.js'))return source;if(!source.includes('</body>'))throw Error('Spotify client index has no body end');return source.replace('</body>','<script src="./musicthing-link.js"></script></body>')}

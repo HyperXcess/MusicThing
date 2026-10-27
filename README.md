@@ -1,6 +1,6 @@
 # VisualThing
 
-[Releases](https://github.com/HyperXcess/MusicThing/releases) · [Issues](https://github.com/HyperXcess/MusicThing/issues)
+[Releases](https://github.com/HyperXcess/VisualThing/releases) · [Issues](https://github.com/HyperXcess/VisualThing/issues)
 
 **Eight retrowave visualizers, animated characters and timed lyrics for your Car Thing.**
 
@@ -19,7 +19,7 @@ Install and sign in to DeskThing's **Spotify app** first. Music must play throug
 ## Install
 
 1. In DeskThing, open **Downloads → Add Client/App** in the left sidebar.
-2. Add `https://github.com/HyperXcess/MusicThing` as an **App** repository, then pull/download the latest release and initialize it.
+2. Add `https://github.com/HyperXcess/VisualThing` as an **App** repository, then pull/download the latest release and initialize it.
 3. The declared post-install helper backs up and stages VisualThing navigation and the Spotify visualizer integration. Spotify must already be installed. It does not modify Spotify credentials or calendar settings.
 4. Open **Clients → Push staged client**, then **Restart Chromium on the Device**.
 5. Open VisualThing from your app launcher. Audio capture starts automatically.
@@ -91,7 +91,7 @@ MIT. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for dependency credits
 
 ### VisualThing v0.2.7
 
-VisualThing is the new public name. Its internal app ID, installation folder, runtime ZIP prefix and GitHub repository remain `musicthing` / `MusicThing` for update compatibility.
+VisualThing is the new public name. Its internal app ID, installation folder, runtime ZIP prefix remain `musicthing` for update compatibility. The GitHub repository is now `VisualThing`; GitHub redirects the previous `MusicThing` address.
 
 Beat Fighter now has six illustrated chibi fighters, expanded combat and quiet poses, and fifty recognizable interactive props. See the [updated visual guide](docs/VISUAL-GUIDE.md) for the cast and complete object galleries.
 
@@ -101,3 +101,8 @@ The public package includes eight visualizers. The embeddable `/app/musicthing/c
 ### Standalone app and optional ControlThing integration
 
 VisualThing runs as its own DeskThing app. Open it from the app list and use its More menu for visualizer selection, sensitivity, animation pace, lyrics, queue, recent tracks and speakers. ControlThing is not required. When configured, ControlThing can embed the settings page as a convenience; the on-screen lyric toggle and character picker remain in VisualThing.
+
+
+### Two-finger background controls
+
+In Beat Runner, Beat Fighter and Beat DJ, swipe **two fingers up/down** to adjust only the background response, or **left/right** to cycle its palette. Settings are saved separately for each mode. The gesture works over the app and surrounding DeskThing controls; one-finger character, navigation and pace gestures remain available. The existing 0.11.2 client integration must be staged and pushed for whole-screen coverage.

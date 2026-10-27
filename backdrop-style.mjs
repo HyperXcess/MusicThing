@@ -1,0 +1,2 @@
+export const backdropPalettes=[{name:'Hyper',colors:['#27ead5','#b782ff','#ff2397']},{name:'Ember',colors:['#ffb24d','#ff635e','#ff3e9e']},{name:'Glacier',colors:['#a9f5ff','#48bfff','#8e88ff']},{name:'Acid',colors:['#d4ff65','#44e8a6','#26b9bf']}];
+let current={gain:1,...backdropPalettes[0]};export const getBackdropStyle=()=>current;export function setBackdropStyle(gain=1,palette=0){current={gain,...backdropPalettes[((palette%backdropPalettes.length)+backdropPalettes.length)%backdropPalettes.length]}}

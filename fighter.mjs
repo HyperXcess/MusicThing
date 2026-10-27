@@ -1,6 +1,6 @@
 import {createPropWorld,propCatalog} from './fighter-props.mjs';
 import {createSoundstage} from './fighter-soundstage.mjs';
-import {paintChibi,fighterArtReady} from './fighter-art.mjs';
+import {paintChibi,fighterArtReady,prepareFighter,fighterAnimationReady} from './fighter-art.mjs';
 import {createSpectrumWaves} from './spectrum-waves.mjs';
 import {faceState} from './fighter-face.mjs';
 import {moveDeck,katanaDeck,moveHeights,isEvasion} from './fighter-motion.mjs';
@@ -16,11 +16,14 @@ export const fighters=[
 const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 export function createFighter({spectrum=null,label=true}={}){
  const soundstage=createSoundstage(),objects=createPropWorld();
- let character=0,last=null,silence=0,restTime=0,oldBass=0,oldEnergy=0,cooldown=0,obstacles=[],particles=[],attack=null,hits=0,spawned=0,waves=spectrum||createSpectrumWaves(),dodges=0,walkTravel=0,lastSpawn=-Infinity,lastClear=-Infinity,seed=9473,deck=[],lastMove=null;
+ let character=0,requestedCharacter=0,last=null,silence=0,restTime=0,oldBass=0,oldEnergy=0,cooldown=0,obstacles=[],particles=[],attack=null,hits=0,spawned=0,waves=spectrum||createSpectrumWaves(),dodges=0,walkTravel=0,lastSpawn=-Infinity,lastClear=-Infinity,seed=9473,deck=[],lastMove=null;
  const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
  const nextMove=()=>{if(!deck.length){deck=(character===5?katanaDeck:moveDeck).slice();for(let i=deck.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}if(deck[deck.length-1]===lastMove)[deck[0],deck[deck.length-1]]=[deck[deck.length-1],deck[0]]}return lastMove=deck.pop()};
- const cycle=()=>{character=(character+1)%fighters.length;deck=[];return{index:character,name:fighters[character].name}};
- return{queueObject:id=>objects.choose(id),ready:()=>fighterArtReady(character),queueMove:move=>{if([...moveDeck,...katanaDeck].includes(move)){deck.push(move);cooldown=0;oldBass=0;oldEnergy=0}},cycle,getCharacter:()=>character,setCharacter:i=>{character=((i%fighters.length)+fighters.length)%fighters.length;deck=[]},
+ const requestCharacter=i=>{const next=((i%fighters.length)+fighters.length)%fighters.length;requestedCharacter=next;if(fighterAnimationReady(next)){character=next;deck=[]}else prepareFighter(next).then(ready=>{if(ready&&requestedCharacter===next){character=next;deck=[]}})};
+ prepareFighter(0);
+ const cycle=()=>{requestCharacter(requestedCharacter+1);return{index:requestedCharacter,name:fighters[requestedCharacter].name}};
+
+ return{queueObject:id=>objects.choose(id),ready:()=>fighterArtReady(character),queueMove:move=>{if([...moveDeck,...katanaDeck].includes(move)){deck.push(move);cooldown=0;oldBass=0;oldEnergy=0}},cycle,getCharacter:()=>requestedCharacter,setCharacter:requestCharacter,
  draw(ctx,w,h,now,bands,sensitivity=1,pace=1,skylineGain=1,forcedRest=false){if(forcedRest){bands=Array(32).fill(0);obstacles=[];attack=null;}
   const dt=last==null?.04:clamp((now-last)/1000,0,.08);last=now;
   const clean=Array.from({length:32},(_,i)=>clamp(Number(bands?.[i])||0,0,1));

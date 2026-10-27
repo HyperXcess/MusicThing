@@ -1,3 +1,4 @@
+import {getBackdropStyle} from './backdrop-style.mjs';
 import {runnerBodies,paintRunnerBody,paintRunnerBoot} from './runner-bodies.mjs';
 import {cast,paintCastHead,paintCastIdle,runnerIdlePose,paintGhostSleep} from './runner-cast.mjs';
 import {drawRunnerEnvironment} from './runner-environments.mjs';
@@ -37,7 +38,7 @@ export function createRunner({label=true}={}){let last=null,travel=0,speed=0,sil
   // Each skyline tower is a live EQ bin; stable width, audio-driven height.
   for(let i=0;i<32;i++){const slot=w/28,x=((i*slot-travel*.13)%(slot*32)+slot*32)%(slot*32)-slot*2,bh=8+Math.min(1,Math.max(0,bands[i]*skylineGain))*h*.57;
    ctx.fillStyle=i<10?'#103c3e':i<22?'#302043':'#42152f';ctx.fillRect(x,ground-bh,slot-4,bh);
-   ctx.fillStyle=i<10?'#27ead5':i<22?'#b782ff':'#ff2397';ctx.fillRect(x,ground-bh,slot-4,3);
+   ctx.fillStyle=getBackdropStyle().colors[i<10?0:i<22?1:2];ctx.fillRect(x,ground-bh,slot-4,3);
   }
   ctx.strokeStyle='#44265f';ctx.lineWidth=1;for(let i=0;i<13;i++){const x=((i*w/10-travel)%(w+w/5)+(w+w/5))%(w+w/5)-w/10;ctx.beginPath();ctx.moveTo(x,ground);ctx.lineTo(x-w*.16,h);ctx.stroke()}
   ctx.strokeStyle='#27ead5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,ground);ctx.lineTo(w,ground);ctx.stroke();

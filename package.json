@@ -1,6 +1,6 @@
 {
   "name": "musicthing",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
@@ -18,12 +18,12 @@
   "author": "HyperXcess",
   "license": "MIT",
   "description": "VisualThing: audio-reactive worlds, animated fighters, runners and DJs for DeskThing",
-  "homepage": "https://github.com/HyperXcess/MusicThing",
+  "homepage": "https://github.com/HyperXcess/VisualThing",
   "repository": {
     "type": "git",
-    "url": "https://github.com/HyperXcess/MusicThing.git"
+    "url": "https://github.com/HyperXcess/VisualThing.git"
   },
   "bugs": {
-    "url": "https://github.com/HyperXcess/MusicThing/issues"
+    "url": "https://github.com/HyperXcess/VisualThing/issues"
   }
 }

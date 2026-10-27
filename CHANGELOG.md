@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.8 — 2026-10-26
+
+- Rename the GitHub repository to VisualThing while preserving the musicthing internal app ID.
+- Add confirmed two-finger controls in Beat Runner, Beat Fighter and Beat DJ: vertical swipes adjust background sensitivity; horizontal swipes cycle palettes.
+- Cover the entire screen, including surrounding DeskThing controls and gestures split across the app boundary.
+- Apply palettes during the swipe, retain gesture ownership when a finger lifts first, and prevent accidental clicks or character changes.
+- Save background settings independently for each mode and show clearer confirmation labels.
+- Keep ControlThing optional and preserve one-finger interactions.
+- Optimize fighter sheets for device resolution and predecode all six fighters during idle time to reduce switching stutter.
+
 ## 0.2.7 — 2026-10-26
 
 - Rename the public app to VisualThing; preserve the musicthing app ID and existing update URLs.
